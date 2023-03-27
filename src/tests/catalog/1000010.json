@@ -1,0 +1,130 @@
+{
+    "catalogItem": {
+        "ns": "catalog/ext/aaa-healthcare-consortium/actor/app/actor_1000436/application",
+        "name": "高齢者向け健康サポートアプリ",
+        "_code": {
+            "_value": 1000461,
+            "_ver": 1
+        },
+        "inherit": {
+            "_value": 41,
+            "_ver": 1
+        },
+        "description": "aaa地区にお住いの高齢者のための健康サポートアプリです。"
+    },
+    "template": {
+        "_code": {
+            "_value": 1000461,
+            "_ver": 1
+        },
+        "information-site": null,
+        "region-alliance": [
+            {
+                "_value": 1001087,
+                "_ver": 1
+            },
+            {
+                "_value": 1001094,
+                "_ver": 1
+            },
+            {
+                "_value": 1001098,
+                "_ver": 1
+            },
+            {
+                "_value": 1001102,
+                "_ver": 1
+            },
+            {
+                "_value": 1001104,
+                "_ver": 1
+            },
+            {
+                "_value": 1001109,
+                "_ver": 1
+            }
+        ],
+        "share": [
+            {
+                "_value": 1000463,
+                "_ver": 1
+            },
+            {
+                "_value": 1000464,
+                "_ver": 1
+            }
+        ],
+        "store": [
+            {
+                "_value": 1000467,
+                "_ver": 1
+            }
+        ]
+    },
+    "prop": [
+        {
+            "key": "information-site",
+            "type": {
+                "of": "string",
+                "cmatrix": null,
+                "format": null,
+                "unit": null,
+                "candidate": null
+            },
+            "description": "アプリケーションの情報サイト",
+            "isInherit": true
+        },
+        {
+            "key": "region-alliance",
+            "type": {
+                "of": "code[]",
+                "cmatrix": null,
+                "candidate": {
+                    "ns": null,
+                    "_code": null,
+                    "base": {
+                        "_value": 48,
+                        "_ver": 1
+                    }
+                }
+            },
+            "description": "参加している領域運営サービスプロバイダーのリージョンコード配列",
+            "isInherit": true
+        },
+        {
+            "key": "share",
+            "type": {
+                "of": "code[]",
+                "cmatrix": null,
+                "candidate": {
+                    "ns": null,
+                    "_code": null,
+                    "base": {
+                        "_value": 40,
+                        "_ver": 1
+                    }
+                }
+            },
+            "description": "アプリケーションが提供する状態共有機能の定義",
+            "isInherit": true
+        },
+        {
+            "key": "store",
+            "type": {
+                "of": "code[]",
+                "cmatrix": null,
+                "candidate": {
+                    "ns": null,
+                    "_code": null,
+                    "base": {
+                        "_value": 39,
+                        "_ver": 1
+                    }
+                }
+            },
+            "description": "アプリケーションが蓄積可能なデータの定義",
+            "isInherit": true
+        }
+    ],
+    "attribute": null
+}

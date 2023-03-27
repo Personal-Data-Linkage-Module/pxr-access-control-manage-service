@@ -1,0 +1,82 @@
+[
+    {
+        "catalogItem": {
+            "ns": "catalog/model/actor/wf/workflow",
+            "name": "共有制限定義",
+            "description": "ワークフローが蓄積可能なデータの共有制限の定義です。",
+            "_code": {
+                "_value": 1000009,
+                "_ver": null
+            },
+            "inherit": null
+        },
+        "template": {
+            "prop": null,
+            "store": null
+        },
+        "inner": null,
+        "attribute": null
+    },
+    {
+        "catalogItem": {
+            "ns": "catalog/model/actor/wf/workflow",
+            "name": "共有制限定義",
+            "description": "ワークフローが蓄積可能なデータの共有制限の定義です。",
+            "_code": {
+                "_value": 1000009,
+                "_ver": null
+            },
+            "inherit": null
+        },
+        "template": {
+            "prop": null,
+            "store": {}
+        },
+        "inner": null,
+        "attribute": null
+    },
+    {
+        "catalogItem": {
+            "ns": "catalog/model/actor/wf/workflow",
+            "name": "共有制限定義",
+            "description": "ワークフローが蓄積可能なデータの共有制限の定義です。",
+            "_code": {
+                "_value": 1000009,
+                "_ver": null
+            },
+            "inherit": null
+        },
+        "template": {
+            "prop": null,
+            "store": [
+                {
+                    "_value": 215
+                }
+            ]
+        },
+        "inner": null,
+        "attribute": null
+    },
+    {
+        "catalogItem": {
+            "ns": "catalog/model/actor/wf/workflow",
+            "name": "共有制限定義",
+            "description": "ワークフローが蓄積可能なデータの共有制限の定義です。",
+            "_code": {
+                "_value": 1000009,
+                "_ver": null
+            },
+            "inherit": null
+        },
+        "template": {
+            "prop": null,
+            "store": [
+                {
+                    "_value": 210
+                }
+            ]
+        },
+        "inner": null,
+        "attribute": null
+    }
+]

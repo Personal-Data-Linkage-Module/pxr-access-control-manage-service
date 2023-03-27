@@ -1,0 +1,238 @@
+{
+    "catalogItem": {
+        "ns": "catalog/ext/test-org/actor/wf/actor_1000004/share",
+        "name": "状態共有機能",
+        "_code": {
+            "_value": 1000384,
+            "_ver": 1
+        },
+        "inherit": {
+            "_value": 45,
+            "_ver": 1
+        },
+        "description": "テスト用ワークフローの状態共有機能です。"
+    },
+    "template": {
+        "_code": {
+            "_value": 1000384,
+            "_ver": 1
+        },
+        "share": [
+            {
+                "role": [
+                    {
+                        "_value": 1000005,
+                        "_ver": 1
+                    }
+                ],
+                "id": "39a03074-856e-5daa-d792-9d672bb9c7ec",
+                "document": [
+                    {
+                        "code": {
+                            "_value": 1000383,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000999,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    }
+                ],
+                "event": [
+                    {
+                        "code": {
+                            "_value": 1000008,
+                            "_ver": 1
+                        },
+                        "thing": [
+                            {
+                                "code": {
+                                    "_value": 1999999,
+                                    "_ver": 1
+                                },
+                                "requireConsent": false
+                            }
+                        ],
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000009,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    }
+                ],
+                "thing": [
+                    {
+                        "code": {
+                            "_value": 1000010,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000011,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000012,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000013,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000014,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000015,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000016,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000017,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000018,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000019,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000037,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000038,
+                            "_ver": 1
+                        }
+                    },
+                    {
+                        "code": {
+                            "_value": 1000039,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000040,
+                            "_ver": 1
+                        }
+                    },
+                    {
+                        "code": {
+                            "_value": 1000041,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000042,
+                            "_ver": 1
+                        }
+                    },
+                    {
+                        "code": {
+                            "_value": 1000043,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000044,
+                            "_ver": 1
+                        }
+                    },
+                    {
+                        "code": {
+                            "_value": 1000045,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000046,
+                            "_ver": 1
+                        }
+                    },
+                    {
+                        "code": {
+                            "_value": 1000047,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    },
+                    {
+                        "code": {
+                            "_value": 1000048,
+                            "_ver": 1
+                        },
+                        "requireConsent": false
+                    }
+                ]
+            }
+        ]
+    },
+    "prop": [
+        {
+            "key": "share",
+            "type": {
+                "of": "inner[]",
+                "inner": "Share",
+                "cmatrix": null,
+                "candidate": null
+            },
+            "description": "共有定義",
+            "isInherit": true
+        }
+    ],
+    "attribute": null
+}

@@ -1,0 +1,27 @@
+[
+    {
+        "catalogItem": {
+            "ns": "catalog/model/actor/app/application",
+            "name": "共有制限定義",
+            "description": "アプリケーションが蓄積可能なデータの共有制限の定義です。",
+            "_code": {
+                "_value": 1000009,
+                "_ver": null
+            },
+            "inherit": null
+        },
+        "template": {
+            "verifyAccessToken": [
+                {
+                    "service": {
+                        "_value": 1000009
+                    },
+                    "verificationRequiredOnStore": true,
+                    "verificationRequiredOnShare": false
+                }
+            ]
+        },
+        "inner": null,
+        "attribute": null
+    }
+]

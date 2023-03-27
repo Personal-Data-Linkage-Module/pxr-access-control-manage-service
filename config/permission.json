@@ -1,0 +1,54 @@
+{
+    "GET": {},
+    "POST": {
+        "^\\/operator\\/?$": [
+            "add"
+        ],
+        "^\\/book-manage\\/?$": [
+            "create"
+        ],
+        "^\\/book-operate\\/user\\/?$": [
+            "create"
+        ],
+        "^\\/catalog-update\\/actor\\/?$": [
+            "application"
+        ],
+        "^\\/catalog-update\\/actor\\/approval\\/?.+\\/?$": [
+            "approval"
+        ],
+        "^\\/catalog-update\\/join\\/?$": [
+            "application"
+        ],
+        "^\\/catalog-update\\/join\\/approval\\/.+\\/?$": [
+            "approval"
+        ],
+        "^\\/catalog\\/(model|built_in|ext)\\/?$": [
+            "create",
+            "update"
+        ],
+        "^updateSet\\/?$": [
+            "create",
+            "update"
+        ]
+    },
+    "PUT": {
+        "^\\/operator\\/\\d+\\/?$": [
+            "update"
+        ],
+        "^\\/operator\\/password\\/\\d+\\/?$": [
+            "add"
+        ],
+        "^\\/catalog\\/(model|built_in|ext)\\/\\d+\\/?$": [
+            "create",
+            "update"
+        ]
+    },
+    "DELETE": {
+        "^\\/operator\\/\\d+\\/?$": [
+            "delete"
+        ],
+        "^\\/catalog\\/(model|built_in|ext)\\/\\d+\\/?$": [
+            "create"
+        ]
+    }
+}

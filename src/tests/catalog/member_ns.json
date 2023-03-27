@@ -1,0 +1,113 @@
+[
+    {
+      "catalogItem": {
+        "ns": "catalog/model/auth/member",
+        "name": "オペレーター追加",
+        "_code": {
+          "_value": 139,
+          "_ver": 1
+        },
+        "inherit": {
+          "_value": 76,
+          "_ver": 1
+        },
+        "description": "運営メンバーの追加操作が可能。"
+      },
+      "template": {
+        "_code": {
+          "_value": 139,
+          "_ver": 1
+        },
+        "auth-name": "add"
+      },
+      "prop": [
+        {
+          "key": "auth-name",
+          "type": {
+            "of": "string",
+            "cmatrix": null,
+            "format": null,
+            "unit": null,
+            "candidate": null
+          },
+          "description": "操作権定義名（各ネームスペース毎にユニークであること）",
+          "isInherit": true
+        }
+      ],
+      "attribute": null
+    },
+    {
+      "catalogItem": {
+        "ns": "catalog/model/auth/member",
+        "name": "オペレーター更新",
+        "_code": {
+          "_value": 140,
+          "_ver": 1
+        },
+        "inherit": {
+          "_value": 76,
+          "_ver": 1
+        },
+        "description": "運営メンバーの更新操作が可能。"
+      },
+      "template": {
+        "_code": {
+          "_value": 140,
+          "_ver": 1
+        },
+        "auth-name": "update"
+      },
+      "prop": [
+        {
+          "key": "auth-name",
+          "type": {
+            "of": "string",
+            "cmatrix": null,
+            "format": null,
+            "unit": null,
+            "candidate": null
+          },
+          "description": "操作権定義名（各ネームスペース毎にユニークであること）",
+          "isInherit": true
+        }
+      ],
+      "attribute": null
+    },
+    {
+      "catalogItem": {
+        "ns": "catalog/model/auth/member",
+        "name": "オペレーター削除",
+        "_code": {
+          "_value": 141,
+          "_ver": 1
+        },
+        "inherit": {
+          "_value": 76,
+          "_ver": 1
+        },
+        "description": "運営メンバーの削除操作が可能。"
+      },
+      "template": {
+        "_code": {
+          "_value": 141,
+          "_ver": 1
+        },
+        "auth-name": "delete"
+      },
+      "prop": [
+        {
+          "key": "auth-name",
+          "type": {
+            "of": "string",
+            "cmatrix": null,
+            "format": null,
+            "unit": null,
+            "candidate": null
+          },
+          "description": "操作権定義名（各ネームスペース毎にユニークであること）",
+          "isInherit": true
+        }
+      ],
+      "attribute": null
+    }
+  ]

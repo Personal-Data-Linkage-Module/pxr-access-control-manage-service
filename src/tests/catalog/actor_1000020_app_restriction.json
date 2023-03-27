@@ -1,0 +1,72 @@
+[
+    {
+        "catalogItem": {
+            "ns": "catalog/ext/test-org/setting/actor/app/actor_1000020",
+            "name": "データ取引組織：アクター個別設定",
+            "_code": {
+                "_value": 1000358,
+                "_ver": 1
+            },
+            "inherit": {
+                "_value": 115,
+                " _ver": 1
+            },
+            "description": "流通制御組織によるデータ取引組織のアクター個別設定の定義です。"
+        },
+        "template": {
+            "prop": null,
+            "document": [
+                {
+                    "code": {
+                        "_value": 1000999,
+                        "_ver": 1
+                    },
+                    "permission": [
+                        {
+                            "region": {
+                                "_value": 111,
+                                "_ver": 1
+                            }
+                        }
+                    ]
+                }
+            ],
+            "event": [
+                {
+                    "code": {
+                        "_value": 1000008,
+                        "_ver": 1
+                    },
+                    "permission": [
+                        {
+                            "service": [
+                                {
+                                    "_value": 1000008,
+                                    "_ver": 1
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "thing": [
+                {
+                    "code": {
+                        "_value": 1000011,
+                        "_ver": 1
+                    },
+                    "permission": [
+                        {
+                            "region": {
+                                "_value": 111,
+                                "_ver": 1
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "inner": null,
+        "attribute": null
+    }
+]

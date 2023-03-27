@@ -1,0 +1,97 @@
+[
+    {
+      "catalogItem": {
+        "ns": "catalog/model/setting/actor/app",
+        "name": "setting",
+        "_code": {
+          "_value": 115,
+          "_ver": 1
+        },
+        "inherit": null,
+        "description": "流通制御によるデータ取引サービスプロバイダーのアクター個別設定の定義です。"
+      },
+      "template": {
+        "_code": {
+          "_value": 115,
+          "_ver": 1
+        },
+        "auth-group": [ { "auth": [
+          {
+            "_value": 140,
+            "_ver": 1
+          },
+          {
+            "_value": 141,
+            "_ver": 1
+          },
+          {
+            "_value": 142,
+            "_ver": 1
+          },
+          {
+            "_value": 143,
+            "_ver": 1
+          },
+          {
+            "_value": 144,
+            "_ver": 1
+          },
+          {
+            "_value": 147,
+            "_ver": 1
+          },
+          {
+            "_value": 149,
+            "_ver": 1
+          },
+          {
+            "_value": 152,
+            "_ver": 1
+          },
+          {
+            "_value": 153,
+            "_ver": 1
+          }
+        ] } ],
+        "certify-consumer": null,
+        "create-book": null
+      },
+      "prop": [
+        {
+          "key": "auth",
+          "type": {
+            "of": "code[]",
+            "cmatrix": null,
+            "candidate": {
+              "ns": [
+                "catalog/model/auth/*"
+              ],
+              "_code": null,
+              "base": null
+            }
+          },
+          "description": "操作権の配列",
+          "isInherit": false
+        },
+        {
+          "key": "certify-consumer",
+          "type": {
+            "of": "boolean",
+            "cmatrix": null
+          },
+          "description": "Consumer認定権限有無",
+          "isInherit": false
+        },
+        {
+          "key": "create-book",
+          "type": {
+            "of": "boolean",
+            "cmatrix": null
+          },
+          "description": "Book開設権限有無",
+          "isInherit": false
+        }
+      ],
+      "attribute": null
+    }
+  ]

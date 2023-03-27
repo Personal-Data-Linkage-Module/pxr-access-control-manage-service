@@ -1,0 +1,81 @@
+# Copyright 2022 NEC Corporation
+# Released under the MIT license.
+# https://opensource.org/licenses/mit-license.php
+#
+# SDE-IMPL-RECOMMENDED REST API サーバーのポート番号を指定します
+ports:
+    http: 3014
+
+# SDE-IMPL-RECOMMENDED ログレベルを次のいずれかを設定します[none/debug/info]
+loglevel: info
+
+# SDE-MSA-PRIN 過負荷を回避する （MSA-PRIN-ID-02）
+# SDE-IMPL-RECOMMENDED Backpressureの設定をします
+backPressure:
+    threshold: 100  # 同時実行数しきい値
+
+bookManageService:
+    protocol: http
+    first: localhost:3005/book-manage/settings/store/
+    getList: http://localhost:3005/book-manage/search/
+    getSharingDataDefinition: http://localhost:3005/book-manage/settings/share/
+    collationTemporaryShareCode: http://localhost:3005/book-manage/ind/settings/share/temp/collation
+
+accessControlService:
+    local:
+        protocol: http
+        first: :3015/access-control
+    protocol: http
+    first: :3015/access-control
+
+catalogService:
+    get: http://localhost:3001/catalog/
+    extName: test-org
+
+cTokenLedgerService:
+    getCount: http://localhost:3008/ctoken-ledger/count/
+
+binaryManageService:
+    upload: /binary-manage/upload/{fileId}/{chunkNo}
+    upload-end: /binary-manage/upload/end/{fileId}
+    upload-cancel: /binary-manage/upload/cancel/{fileId}
+
+operatorService:
+    session: http://localhost:3000/operator/session/
+
+pxr-root:
+    blockCode: 1000110
+
+standardTime: 9
+
+defaultExpire:
+    addMinutes: 40
+
+permittedCatalogNs:
+    pxr-root:
+        - ^catalog\/ext\/.+\/attribute\/?.*$
+        - ^catalog\/ext\/.+\/book\/?.*$
+        - ^catalog\/ext\/.+\/category\/?.*$
+        - ^catalog\/ext\/.+\/env\/event\/?.*$
+        - ^catalog\/ext\/.+\/env\/thing\/?.*$
+        - ^catalog\/ext\/.+\/licence\/?.*$
+        - ^catalog\/ext\/.+\/person\/?.*$
+        - ^catalog\/ext\/.+\/processing\/?.*$
+        - ^catalog\/ext\/.+\/qualitative\/qa\/?.*$
+        - ^catalog\/ext\/.+\/setting\/actor-own\/pxr-root\/actor_%s\/?.*$
+        - ^catalog\/ext\/.+\/setting\/(app|consumer|data-trader|pxr|pxr-root|region-root|wf|actor\/.+)$
+    region-root:
+        - ^catalog\/ext\/.+\/actor\/region-root\/actor_%s\/.+$
+        - ^catalog\/ext\/.+\/setting\/actor-own\/region-root\/actor_%s\/?.*$
+    app:
+        - ^catalog\/ext\/.+\/actor\/app\/actor_%s\/.+$
+        - ^catalog\/ext\/.+\/document\/actor_%s\/.+$
+        - ^catalog\/ext\/.+\/env\/actor_%s\/.+$
+        - ^catalog\/ext\/.+\/event\/actor_%s\/.+$
+        - ^catalog\/ext\/.+\/qualitative\/actor_%s\/?.*$
+        - ^catalog\/ext\/.+\/setting\/actor-own\/app\/actor_%s\/?.*$
+        - ^catalog\/ext\/.+\/thing\/actor_%s\/.+$
+
+cert:
+    client_crt: ./cert/client_ca.crt
+    client_key: ./cert/client.key

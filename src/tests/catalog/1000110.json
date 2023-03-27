@@ -1,0 +1,91 @@
+{
+    "catalogItem": {
+      "ns": "catalog/ext/test-org/block/pxr-root",
+      "name": "PXR-Root-Block",
+      "_code": {
+        "_value": 1000110,
+        "_ver": 1
+      },
+      "inherit": {
+        "_value": 33,
+        "_ver": null
+      },
+      "description": "流通制御サービスプロバイダー用PXR-Blockの定義です。"
+    },
+    "template": {
+      "_code": {
+        "_value": 1000110,
+        "_ver": 1
+      },
+      "actor-type": "pxr-root",
+      "assigned-organization": "流通制御組織",
+      "assignment-status": "assigned",
+      "base-url": "localhost",
+      "service-name": "localhost",
+      "id": "PXR-Root-01"
+    },
+    "prop": [
+      {
+        "key": "actor-type",
+        "type": {
+          "of": "string",
+          "format": null,
+          "unit": null,
+          "candidata": {
+            "value": [
+              "pxr-root",
+              "region-root",
+              "app",
+              "wf",
+              "data-trader",
+              "consumer"
+            ]
+          }
+        },
+        "description": "このPXR-Blockを保有する組織の種別"
+      },
+      {
+        "key": "assigned-organization",
+        "type": {
+          "of": "string",
+          "format": null,
+          "unit": null
+        },
+        "description": "割当アクター名"
+      },
+      {
+        "key": "assignment-status",
+        "type": {
+          "of": "string",
+          "format": null,
+          "unit": null,
+          "candidata": {
+            "value": [
+              "assigned",
+              "unassigned"
+            ]
+          }
+        },
+        "description": "割当状態"
+      },
+      {
+        "key": "base-url",
+        "type": {
+          "of": "string",
+          "format": null,
+          "unit": null
+        },
+        "description": "PXR-BlockのベースURL"
+      },
+      {
+        "key": "id",
+        "type": {
+          "of": "string",
+          "format": null,
+          "unit": null
+        },
+        "description": "PXR-Block識別子"
+      }
+    ],
+    "attribute": null
+}

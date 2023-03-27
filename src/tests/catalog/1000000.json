@@ -1,0 +1,105 @@
+{
+    "catalogItem": {
+        "ns": "catalog/ext/test-org/actor/app",
+        "name": "営利企業",
+        "description": "営利企業の定義です。",
+        "_code": {
+            "_value": 1000114,
+            "_ver": 1
+        },
+        "inherit": {
+            "_value": 37,
+            "_ver": 1
+        }
+    },
+    "template": {
+        "main-block": {
+          "_value": 1000109,
+          "_ver": 1
+        },
+        "prop": null,
+        "value": [
+            {
+                "key": "main-block",
+                "value": [
+                    {
+                        "key": "_value",
+                        "value": 1000108
+                    },
+                    {
+                        "key": "_ver",
+                        "value": 1
+                    }
+                ]
+            },
+            {
+                "key": "statement",
+                "value": [
+                    {
+                        "key": "title",
+                        "value": "組織ステートメント"
+                    },
+                    {
+                        "key": "section",
+                        "value": [
+                            {
+                                "key": "title",
+                                "value": "ご挨拶"
+                            },
+                            {
+                                "key": "content",
+                                "value": [
+                                    {
+                                        "key": "sentence",
+                                        "value": "営利企業の組織ステートメントです。"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "status",
+                "value": [
+                    {
+                        "key": "status",
+                        "value": "certified"
+                    },
+                    {
+                        "key": "by",
+                        "value": [
+                            {
+                                "key": "_value",
+                                "value": 1000001
+                            },
+                            {
+                                "key": "_ver",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    {
+                        "key": "at",
+                        "value": "20200101T000000.000+0900"
+                    }
+                ]
+            },
+            {
+                "key": "trader-alliance",
+                "value": [
+                    {
+                        "key": "_value",
+                        "value": 1000020
+                    },
+                    {
+                        "key": "_ver",
+                        "value": 1
+                    }
+                ]
+            }
+        ]
+    },
+    "inner": null,
+    "attribute": null
+}

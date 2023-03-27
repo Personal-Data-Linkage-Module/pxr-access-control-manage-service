@@ -1,0 +1,67 @@
+[
+    {
+        "catalogItem": {
+            "ns": "catalog/model/actor/app/sharing-restriction",
+            "name": "共有制限定義",
+            "description": "アプリケーションが蓄積可能なデータの共有制限の定義です。",
+            "_code": {
+                "_value": 210,
+                "_ver": null
+            },
+            "inherit": null
+        },
+        "template": {
+            "prop": null,
+            "document": [
+                {
+                    "code": {
+                        "_value": 1000999,
+                        "_ver": 1
+                    },
+                    "prohibition": [
+                        {
+                            "service": [{
+                                "_value": 1000007,
+                                "_ver": 1
+                            }]
+                        }
+                    ]
+                }
+            ],
+            "event": [
+                {
+                    "code": {
+                        "_value": 1000008,
+                        "_ver": 1
+                    },
+                    "prohibition": [
+                        {
+                            "service": [{
+                                "_value": 1000007,
+                                "_ver": 1
+                            }]
+                        }
+                    ]
+                }
+            ],
+            "thing": [
+                {
+                    "code": {
+                        "_value": 1000010,
+                        "_ver": 1
+                    },
+                    "prohibition": [
+                        {
+                            "service": [{
+                                "_value": 1000007,
+                                "_ver": 1
+                            }]
+                        }
+                    ]
+                }
+            ]
+        },
+        "inner": null,
+        "attribute": null
+    }
+]

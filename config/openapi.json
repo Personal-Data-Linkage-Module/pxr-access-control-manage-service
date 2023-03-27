@@ -1,0 +1,500 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Access-Control-Manage Service",
+        "version": "1.0",
+        "description": "アクセス制御管理サービス"
+    },
+    "servers": [
+        {
+            "url": "/access-control-manage"
+        }
+    ],
+    "paths": {
+        "/block": {
+            "post": {
+                "tags": [
+                    "Block間APIトークン生成指示"
+                ],
+                "description": "通信する際に必要なAPIトークンの生成を行う",
+                "requestBody": {
+                    "description": "オペレーター情報",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "description": "リクエストの配列",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "caller": {
+                                            "type": "object",
+                                            "description": "呼出元",
+                                            "properties": {
+                                                "blockCode": {
+                                                    "type": "integer",
+                                                    "description": "呼出元Blockコード"
+                                                },
+                                                "apiUrl": {
+                                                    "type": "string",
+                                                    "description": "呼出元APIのURL"
+                                                },
+                                                "apiMethod": {
+                                                    "type": "string",
+                                                    "description": "呼出元APIの実行メソッド(GET, POST, PUT, DELETE)"
+                                                },
+                                                "userId": {
+                                                    "type": "string",
+                                                    "description": "呼び出した利用者ID"
+                                                },
+                                                "operator": {
+                                                    "type": "object",
+                                                    "description": "オペレーター情報",
+                                                    "properties": {
+                                                        "type": {
+                                                            "type": "integer",
+                                                            "description": "オペレーター種別"
+                                                        },
+                                                        "loginId": {
+                                                            "type": "string",
+                                                            "description": "ログインID"
+                                                        },
+                                                        "app": {
+                                                            "type": "object",
+                                                            "description": "アプリケーションカタログ情報",
+                                                            "properties": {
+                                                                "_value": {
+                                                                    "type": "integer",
+                                                                    "description": "アプリケーションカタログコード"
+                                                                },
+                                                                "_ver": {
+                                                                    "type": "integer",
+                                                                    "description": "アプリケーションカタログバージョン"
+                                                                }
+                                                            }
+                                                        },
+                                                        "wf": {
+                                                            "type": "object",
+                                                            "description": "ワークフローカタログ情報",
+                                                            "properties": {
+                                                                "_value": {
+                                                                    "type": "integer",
+                                                                    "description": "ワークフローカタログコード"
+                                                                },
+                                                                "_ver": {
+                                                                    "type": "integer",
+                                                                    "description": "ワークフローカタログバージョン"
+                                                                }
+                                                            }
+                                                        },
+                                                        "role": {
+                                                            "type": "array",
+                                                            "description": "ロール配列",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "_value": {
+                                                                        "type": "integer",
+                                                                        "description": "ロールカタログコード"
+                                                                    },
+                                                                    "_ver": {
+                                                                        "type": "integer",
+                                                                        "description": "ロールカタログバージョン"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "requestBody": {
+                                                    "type": "object"
+                                                },
+                                                "apiCode": {
+                                                    "type": "string",
+                                                    "description": "API呼出元が発行したコード値"
+                                                }
+                                            }
+                                        },
+                                        "target": {
+                                            "type": "object",
+                                            "description": "呼出先",
+                                            "properties": {
+                                                "blockCode": {
+                                                    "type": "integer",
+                                                    "description": "呼出元Blockコード"
+                                                },
+                                                "apiUrl": {
+                                                    "type": "string",
+                                                    "description": "呼出元APIのURL"
+                                                },
+                                                "apiMethod": {
+                                                    "type": "string",
+                                                    "description": "呼出元APIの実行メソッド(GET, POST, PUT, DELETE)"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "example": [
+                                {
+                                    "caller": {
+                                        "blockCode": 1000112,
+                                        "apiUrl": "/pxr-block-proxy",
+                                        "apiMethod": "GET",
+                                        "userId": null,
+                                        "operator": {
+                                            "type": 3,
+                                            "loginId": "wf_pj2_2_demo01",
+                                            "role": null
+                                        },
+                                        "requestBody": {},
+                                        "apiCode": "2abeba95-faae-4d38-8582-9c89a0954637"
+                                    },
+                                    "target": {
+                                        "blockCode": 1000110,
+                                        "apiUrl": "/catalog/1000004",
+                                        "apiMethod": "GET"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "アクセス制御管理サービスから取得した、APIトークン",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "description": "APIトークン配列",
+                                    "items": {
+                                        "type": "object",
+                                        "description": "APIトークン情報",
+                                        "properties": {
+                                            "apiUrl": {
+                                                "type": "string",
+                                                "description": "宛先API URL"
+                                            },
+                                            "apiMethod": {
+                                                "type": "string",
+                                                "description": "APIメソッド名"
+                                            },
+                                            "apiToken": {
+                                                "type": "string",
+                                                "description": "発行されたAPIトークン"
+                                            },
+                                            "userId": {
+                                                "type": "string",
+                                                "description": "利用者ID"
+                                            },
+                                            "expirationAt": {
+                                                "type": "string",
+                                                "description": "有効期限",
+                                                "format": "yyyy-MM-dd hh:mm:ss.SSS"
+                                            }
+                                        }
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "apiUrl": "/catalog/1000004",
+                                        "apiMethod": "GET",
+                                        "apiToken": "2abeba95-faae-4d38-8582-9c89a0954637",
+                                        "userId": null,
+                                        "expirationAt": "2020-01-01T00:00:00.000+0900"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/share/continuous": {},
+        "/share/temp": {},
+        "/store": {
+            "post": {
+                "tags": [
+                    "データ蓄積APIトークン生成指示"
+                ],
+                "description": "データ蓄積をする際に必要なAPIトークンの生成を行う",
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "session",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "セッション情報",
+                            "example": {
+                                "sessionId": "sessionId",
+                                "operatorId": 1,
+                                "type": 1,
+                                "loginId": "wf_staff01",
+                                "pxrId": "test",
+                                "mobilePhone": "0311112222",
+                                "lastLoginAt": "2020-01-01T00:00:00.000+0900",
+                                "attributes": {},
+                                "block": {
+                                    "_value": 1000112,
+                                    "_ver": 1
+                                },
+                                "actor": {
+                                    "_value": 1000004,
+                                    "_ver": 1
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "header",
+                        "name": "access-token",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "リクエスト内容のオブジェクト配列",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "description": "リクエスト",
+                                "items": {
+                                    "$ref": "#/components/schemas/requestTemplate"
+                                }
+                            },
+                            "example": [
+                                {
+                                    "caller": {
+                                        "apiCode": "XXXXXXXX-1234-5678-9012-XXXXXXXXXXXX",
+                                        "blockCode": 4444444,
+                                        "apiUrl": "/book-operate/event/{userId}",
+                                        "apiMethod": "POST",
+                                        "userId": "xxx_yyy",
+                                        "operator": {
+                                            "type": 2,
+                                            "loginId": "app01",
+                                            "app": {
+                                                "_value": 1000099,
+                                                "_ver": 1
+                                            }
+                                        }
+                                    },
+                                    "target": {
+                                        "blockCode": 4444444,
+                                        "apiUrl": "/book-operate/event/{userId}",
+                                        "apiMethod": "POST",
+                                        "_code": [
+                                            {
+                                                "_value": 1000009,
+                                                "_ver": 1
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "データ蓄積APIトークン生成指示のレスポンス",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "description": "レスポンス",
+                                    "items": {
+                                        "$ref": "#/components/schemas/responseTemplate"
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "apiUrl": "https://~~~/book-operate/store/event/{userId}",
+                                        "apiMethod": "POST",
+                                        "apiToken": "d0af96799512cf7e4b9ebda5234a7cc8ea49d402d29191b5e9128e15a9399171",
+                                        "userId": "xxx_yyy.app",
+                                        "expirationDate": "2020-01-01 23:59:59.000"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "requestTemplate": {
+                "type": "object",
+                "properties": {
+                    "caller": {
+                        "type": "object",
+                        "description": "呼出元",
+                        "properties": {
+                            "apiCode": {
+                                "type": "string",
+                                "description": "API呼出元が発行したコード値",
+                                "format": "UUID(XXXXXXXX-4444-4444-4444-XXXXXXXXXXXX)"
+                            },
+                            "blockCode": {
+                                "type": "integer",
+                                "description": "呼出元Blockコード"
+                            },
+                            "apiUrl": {
+                                "type": "string",
+                                "description": "呼出元APIのURL",
+                                "format": "URL"
+                            },
+                            "apiMethod": {
+                                "type": "string",
+                                "description": "呼出元APIの実行メソッド",
+                                "required": [
+                                    "POST",
+                                    "PUT",
+                                    "GET",
+                                    "DELETE"
+                                ]
+                            },
+                            "userId": {
+                                "type": "string",
+                                "description": "呼び出した利用者ID"
+                            },
+                            "operator": {
+                                "type": "object",
+                                "description": "オペレーター情報",
+                                "properties": {
+                                    "type": {
+                                        "type": "integer",
+                                        "description": "オペレーター種別",
+                                        "required": [
+                                            "0",
+                                            "1",
+                                            "2",
+                                            "3"
+                                        ]
+                                    },
+                                    "loginId": {
+                                        "type": "string",
+                                        "description": "ログインID"
+                                    },
+                                    "app": {
+                                        "type": "object",
+                                        "description": "アプリケーションカタログ情報",
+                                        "properties": {
+                                            "_value": {
+                                                "type": "integer",
+                                                "description": "アプリケーションカタログコード"
+                                            },
+                                            "_ver": {
+                                                "type": "integer",
+                                                "description": "アプリケーションカタログバージョン"
+                                            }
+                                        }
+                                    },
+                                    "wf": {
+                                        "type": "object",
+                                        "description": "ワークフローカタログ情報",
+                                        "properties": {
+                                            "_value": {
+                                                "type": "integer",
+                                                "description": "ワークフローカタログコード"
+                                            },
+                                            "_ver": {
+                                                "type": "integer",
+                                                "description": "ワークフローカタログバージョン"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "target": {
+                        "type": "object",
+                        "description": "呼出先",
+                        "properties": {
+                            "blockCode": {
+                                "type": "integer",
+                                "description": "呼出先Blockコード"
+                            },
+                            "apiUrl": {
+                                "type": "string",
+                                "description": "呼出先PIのURL",
+                                "format": "URL"
+                            },
+                            "apiMethod": {
+                                "type": "string",
+                                "description": "呼出先APIの実行メソッド",
+                                "required": [
+                                    "POST",
+                                    "PUT",
+                                    "GET",
+                                    "DELETE"
+                                ]
+                            },
+                            "_code": {
+                                "type": "array",
+                                "description": "データ種カタログコード配列",
+                                "items": {
+                                    "type": "object",
+                                    "description": "モノカタログコード",
+                                    "properties": {
+                                        "_value": {
+                                            "type": "integer",
+                                            "description": "カタログコード"
+                                        },
+                                        "_ver": {
+                                            "type": "integer",
+                                            "description": "カタログバージョン"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "responseTemplate": {
+                "type": "object",
+                "properties": {
+                    "apiUrl": {
+                        "type": "string",
+                        "description": "呼出元APIのURL",
+                        "format": "URL"
+                    },
+                    "apiMethod": {
+                        "type": "string",
+                        "description": "呼出元APIの実行メソッド",
+                        "required": [
+                            "POST",
+                            "PUT",
+                            "GET",
+                            "DELETE"
+                        ]
+                    },
+                    "apiToken": {
+                        "type": "string",
+                        "description": "発行されたAPIトークン"
+                    },
+                    "userId": {
+                        "type": "string",
+                        "description": "呼び出した利用者ID"
+                    },
+                    "expirationDate": {
+                        "type": "string",
+                        "description": "有効期限"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,110 @@
+{
+    "catalogItem": {
+        "ns": "catalog/ext/aaa-healthcare-consortium/actor/wf/actor_1000438/workflow",
+        "name": "外来診療",
+        "_code": {
+            "_value": 1000481,
+            "_ver": 1
+        },
+        "inherit": {
+            "_value": 46,
+            "_ver": 1
+        },
+        "description": "外来診療の定義です。"
+    },
+    "template": {
+        "_code": {
+            "_value": 1000481,
+            "_ver": 1
+        },
+        "information-site": null,
+        "region-alliance": [
+            {
+                "_value": 1000455,
+                "_ver": 1
+            }
+        ],
+        "share": [
+            {
+                "_value": 1000485,
+                "_ver": 1
+            },
+            {
+                "_value": 1000486,
+                "_ver": 1
+            }
+        ],
+        "store": [
+            {
+                "_value": 1000489,
+                "_ver": 1
+            }
+        ]
+    },
+    "prop": [
+        {
+            "key": "information-site",
+            "type": {
+                "of": "string",
+                "cmatrix": null,
+                "format": null,
+                "unit": null,
+                "candidate": null
+            },
+            "description": "ワークフローの情報サイト",
+            "isInherit": true
+        },
+        {
+            "key": "region-alliance",
+            "type": {
+                "of": "code[]",
+                "cmatrix": null,
+                "candidate": {
+                    "ns": null,
+                    "_code": null,
+                    "base": {
+                        "_value": 48,
+                        "_ver": 1
+                    }
+                }
+            },
+            "description": "参加している領域運営サービスプロバイダーのリージョンコード配列",
+            "isInherit": true
+        },
+        {
+            "key": "share",
+            "type": {
+                "of": "code[]",
+                "cmatrix": null,
+                "candidate": {
+                    "ns": null,
+                    "_code": null,
+                    "base": {
+                        "_value": 45,
+                        "_ver": 1
+                    }
+                }
+            },
+            "description": "ワークフローが提供する状態共有機能の定義",
+            "isInherit": true
+        },
+        {
+            "key": "store",
+            "type": {
+                "of": "code[]",
+                "cmatrix": null,
+                "candidate": {
+                    "ns": null,
+                    "_code": null,
+                    "base": {
+                        "_value": 44,
+                        "_ver": 1
+                    }
+                }
+            },
+            "description": "ワークフローが蓄積可能なデータの定義",
+            "isInherit": true
+        }
+    ],
+    "attribute": null
+}

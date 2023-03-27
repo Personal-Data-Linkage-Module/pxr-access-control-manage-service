@@ -1,0 +1,31 @@
+{
+    "db": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "pxr_pod",
+        "schema": "pxr_access_manage",
+        "user": "pxr_access_manage_user",
+        "password": "pxr_password",
+        "timeout": 60000
+    },
+    "app": {
+        "request-protocol": "http://",
+        "catalog-service": "localhost:3001/catalog/",
+        "permission-path": "/access-control",
+        "permission-path-to-local": "/access-control/access-control",
+        "book-manage-service": "localhost:3005/book-manage/",
+        "permission-port": 3015,
+        "permission-port-to-local": 3015,
+        "pxr-root-block-code": 1000110,
+        "is-pxr-root": false,
+        "deadline": {
+            "value": 40,
+            "unit": "minutes"
+        },
+        "binary-manage": {
+            "upload": "/binary-manage/upload/{fileId}/{chunkNo}",
+            "upload-end": "/binary-manage/upload/end/{fileId}",
+            "upload-cancel": "/binary-manage/upload/cancel/{fileId}"
+        }
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "catalogItem": {
+        "ns": "catalog/ext/test-org/actor/wf/actor_1000004/share",
+        "name": "状態共有機能",
+        "_code": {
+            "_value": 1000394,
+            "_ver": 1
+        },
+        "inherit": {
+            "_value": 45,
+            "_ver": 1
+        },
+        "description": "テスト用ワークフローの状態共有機能です。"
+    },
+    "template": {
+        "_code": {
+            "_value": 1000394,
+            "_ver": 1
+        }
+    },
+    "prop": [
+        {
+            "key": "share",
+            "type": {
+                "of": "inner[]",
+                "inner": "Share",
+                "cmatrix": null,
+                "candidate": null
+            },
+            "description": "共有定義",
+            "isInherit": true
+        }
+    ],
+    "attribute": null
+}
