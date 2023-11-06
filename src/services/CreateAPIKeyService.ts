@@ -401,16 +401,27 @@ export default class CreateAPIKeyService {
     /**
      * アクセストークンの検証を行う
      * @param accessToken
+     * @param type
      * @param userId
      * @param actorCode
      * @param app
      * @param wf
      * @param operator
+     * @param tempShareCode
      * RefactorDescription:
      *  #3811 : isAccessTokenVerifyRequired
      *  #3811 : verifyAccessToken
      */
-    static async checkAccessToken (accessToken: string, type: 'store' | 'share', userId: string, actorCode: number, app: number, wf: number, operator: OperatorDomain, tempShareCode?: string) {
+    static async checkAccessToken (
+        accessToken: string,
+        type: 'store' | 'share',
+        userId: string,
+        actorCode: number,
+        app: number,
+        wf: number,
+        operator: OperatorDomain,
+        tempShareCode?: string
+    ) {
         // グローバル設定を取得する
         const extName = await CatalogService.getExtName(operator);
         const globalSetting = await CatalogService.getGlobalSetting(extName, operator);
@@ -423,7 +434,7 @@ export default class CreateAPIKeyService {
                 const requireVerify: boolean = CreateAPIKeyService.isAccessTokenVerifyRequired(catalog, app, wf, type);
                 // アクセストークン検証
                 if (requireVerify) {
-                    await CreateAPIKeyService.verifyAccessToken(accessToken, tempShareCode, operator, userId);
+                    await CreateAPIKeyService.verifyAccessToken(accessToken, tempShareCode, operator, userId, actorCode, app, wf);
                 }
             }
         }
@@ -435,8 +446,11 @@ export default class CreateAPIKeyService {
      * @param tempShareCode
      * @param operator
      * @param userId
+     * @param actorCode
+     * @param app
+     * @param wf
      */
-    private static async verifyAccessToken (accessToken: string, tempShareCode: string, operator: OperatorDomain, userId: string) {
+    private static async verifyAccessToken (accessToken: string, tempShareCode: string, operator: OperatorDomain, userId: string, actorCode: number, app: number, wf: number) {
         if (!accessToken) {
             // アクセストークンが取得できない場合エラー
             throw new AppError(Message.NOT_EXIST_ACCESS_TOKEN, 400);
@@ -452,7 +466,7 @@ export default class CreateAPIKeyService {
             pxrId = sharingTemporaryDefinition.pxrId;
         } else {
             // Book管理サービス Book一覧取得を呼出し、呼び出し元のアクターと利用者IDが一致するBookを見つけPXR-IDを特定
-            const user = await BookManageService.getUserInfoOnlyOne(operator, userId);
+            const user = await BookManageService.getUserInfoOnlyOne(operator, userId, actorCode, app, wf);
             const status = Number(Array.isArray(user) ? user[0]['bookStatus'] : user['bookStatus']);
             // Bookのステータスが 0：通常 以外ならエラー
             if (status !== 0) {

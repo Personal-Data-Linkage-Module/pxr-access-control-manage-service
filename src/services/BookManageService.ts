@@ -11,33 +11,35 @@ import MyBookListElement from '../domains/MyBookListElement';
 import AppError from '../common/AppError';
 import SharingDataDefinition from '../domains/SharingDataDefinition';
 import TemporarySharingDataDefinition from '../domains/TemporarySharingDataDefinition';
+import Config from '../common/Config';
 /* eslint-enable */
+const Message = Config.ReadConfig('./config/message.json');
 
 export default class {
     /**
-     * 利用者IDと、その連携先配列から
+     * 利用者IDと、アクター、APP/WFからMy-Condition-Bookを特定する
      * @param operator
      * @param userId
      */
-    static async getUserInfoOnlyOne (operator: OperatorDomain, userId: string, actorCode?: number) {
-        const user = await this.searchUser(userId, operator, actorCode);
-        return Array.isArray(user) ? user[0] : user;
+    static async getUserInfoOnlyOne (operator: OperatorDomain, userId: string, actor: number, app:number, wf: number) {
+        const user = await this.searchUser(userId, operator, actor, app, wf);
+        return user;
     }
 
     /**
      * My-Condition-Book一覧検索APIを呼び出す
      * @param operator
      */
-    static async searchUser (userId: string, operator: OperatorDomain, actorCode?: number) {
-        const url = config.get('bookManageService.userSearch') + '';
-        let actor = null;
-        if (actorCode) {
-            actor = actorCode;
-        } else {
-            actor = operator.actorCode;
+    static async searchUser (userId: string, operator: OperatorDomain, actor: number, app: number, wf: number) {
+        // userIdが指定されていて APP/WFの設定がない場合エラー
+        if (userId && ((!app && !wf) || (app && wf))) {
+            throw new AppError(Message.MISSING_APP_WF_CATALOG_CODE, 400);
         }
+        const url = config.get('bookManageService.userSearch') + '';
         const data = JSON.stringify({
             actor: actor,
+            app: app,
+            wf: wf,
             userId: userId
         });
         const result = await doRequest('http', url, data, 'post', operator);
@@ -45,7 +47,7 @@ export default class {
             throw new AppError('Book管理サービス.My-Condition-Book一覧が0件でした', 400);
         }
         try {
-            const domain = await transformAndValidate(MyBookListElement, result.body) as MyBookListElement[];
+            const domain = await transformAndValidate(MyBookListElement, result.body) as MyBookListElement;
             return domain;
         } catch (err) {
             throw new AppError('Book管理サービス.My-Condition-Book一覧の結果を内部処理用に変換することに失敗しました', 500, err);

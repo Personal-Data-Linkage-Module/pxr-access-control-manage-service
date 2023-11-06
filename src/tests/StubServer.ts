@@ -22,6 +22,7 @@ import Catalog1000060 = require('./catalog/1000060.json');
 import Catalog1000384 = require('./catalog/1000384.json');
 import Catalog1000385 = require('./catalog/1000385.json');
 import Catalog1000394 = require('./catalog/1000394.json');
+import Catalog1001384 = require('./catalog/1001384.json');
 import Catalog1000108 = require('./catalog/setting_actor_own_app_actor_1000020.json');
 import NamespaceActorSetting1000020 = require('./catalog/setting_actor_app_actor_1000020.json');
 import NamespaceMemberAuth = require('./catalog/member_ns.json');
@@ -105,7 +106,7 @@ export class StubCatalogServer extends BaseStubServer {
             } else if (code === 1000384) {
                 if (req.query['includeDeleted'] === 'true') {
                     res.status(200).json(Catalog1000384).end();
-                } else{
+                } else {
                     const cat = JSON.parse(JSON.stringify(Catalog1000384));
                     cat['catalogItem']['_code']['_ver'] = 2;
                     cat['template']['share'].push({
@@ -175,7 +176,7 @@ export class StubCatalogServer extends BaseStubServer {
             } else if (code === 1000385) {
                 if (req.query['includeDeleted'] === 'true') {
                     res.status(200).json(Catalog1000385).end();
-                } else{
+                } else {
                     const cat = JSON.parse(JSON.stringify(Catalog1000385));
                     cat['catalogItem']['_code']['_ver'] = 2;
                     cat['template']['share'].push({
@@ -244,6 +245,8 @@ export class StubCatalogServer extends BaseStubServer {
                 }
             } else if (code === 1000394) {
                 res.status(200).json(Catalog1000394).end();
+            } else if (code === 1001384) {
+                res.status(200).json(Catalog1001384).end();
             } else if (code === 1000040) {
                 res.status(200).json(Catalog1000040).end();
             } else if (code === 1000060) {
@@ -307,7 +310,7 @@ export class StubCatalogServer extends BaseStubServer {
             } else if (code === 1000384) {
                 if (req.query['includeDeleted'] === 'true') {
                     res.status(200).json(Catalog1000384).end();
-                } else{
+                } else {
                     const cat = JSON.parse(JSON.stringify(Catalog1000384));
                     cat['catalogItem']['_code']['_ver'] = 2;
                     cat['template']['share'].push({
@@ -377,7 +380,7 @@ export class StubCatalogServer extends BaseStubServer {
             } else if (code === 1000385) {
                 if (req.query['includeDeleted'] === 'true') {
                     res.status(200).json(Catalog1000385).end();
-                } else{
+                } else {
                     const cat = JSON.parse(JSON.stringify(Catalog1000385));
                     cat['catalogItem']['_code']['_ver'] = 2;
                     cat['template']['share'].push({
@@ -446,6 +449,8 @@ export class StubCatalogServer extends BaseStubServer {
                 }
             } else if (code === 1000394) {
                 res.status(200).json(Catalog1000394).end();
+            } else if (code === 1001384) {
+                res.status(200).json(Catalog1001384).end();
             } else if (code === 1000040) {
                 res.status(200).json(Catalog1000040).end();
             } else if (code === 1000060) {
@@ -1025,7 +1030,7 @@ export class StubBookManageServer extends BaseStubServer {
             if (req.body['userId'] === 'xxx_yyy.wf2') {
                 res.status(204).end();
             } else if (req.body['userId'] === 'xxx_yyy.dummy') {
-                res.status(200).json([{
+                res.status(200).json({
                     pxrId: 'pxr_userXXX',
                     bookStatus: 0,
                     cooperation: [{
@@ -1035,9 +1040,9 @@ export class StubBookManageServer extends BaseStubServer {
                         },
                         userId: 'xxx_yyy.dummy'
                     }]
-                }]).end();
-            }else {
-                res.status(200).json([{
+                }).end();
+            } else {
+                res.status(200).json({
                     pxrId: 'pxr_user01',
                     bookStatus: 0,
                     cooperation: [{
@@ -1047,7 +1052,7 @@ export class StubBookManageServer extends BaseStubServer {
                         },
                         userId: 'xxx_yyy.wf1'
                     }]
-                }]).end();
+                }).end();
             }
             // res.status(200).json([{
             //     pxrId: 'pxr_user00'
@@ -1242,7 +1247,8 @@ export class StubBookManageServer1 extends BaseStubServer {
                         _value: 10002,
                         _ver: 1
                     },
-                    userId: 'xxx_yyy.wf1'
+                    userId: 'xxx_yyy.wf1',
+                    status: 1
                 }]
             }).end();
             // res.status(200).json([{
@@ -1655,6 +1661,84 @@ export class StubOperatorServer extends BaseStubServer {
                         "_ver": 1
                     }
                 }).end();
+            } else if (session === 'workflowWithService') {
+                res.status(200).json({
+                    "sessionId": "dfb97effad14e3c99d5fb32cdce61137bb440ea4f6b490fb65696b2725e147f3",
+                    "operatorId": 1,
+                    "type": 1,
+                    "loginId": "workflow01",
+                    "name": "workflow01",
+                    "auth": {
+                        "member": {
+                            "add": true,
+                            "update": true,
+                            "delete": true
+                        },
+                        "book": {
+                            "create": true
+                        }
+                    },
+                    "lastLoginAt": "2020-05-26T17:15:60.604+09:00",
+                    "passwordChangedFlg": false,
+                    "attributes": {},
+                    "roles": [
+                        {
+                            "_value": "1",
+                            "_ver": "1"
+                        }
+                    ],
+                    "block": {
+                        "_value": 1000111,
+                        "_ver": 1
+                    },
+                    "actor": {
+                        "_value": 1000114,
+                        "_ver": 1
+                    },
+                    "service": {
+                        "_value": 1000009,
+                        "_ver": 1
+                    }
+                }).end();
+            } else if (session === 'workflowInvalidSession') {
+                res.status(200).json({
+                    "sessionId": "dfb97effad14e3c99d5fb32cdce61137bb440ea4f6b490fb65696b2725e147f3",
+                    "operatorId": 1,
+                    "type": 1,
+                    "loginId": "workflow01",
+                    "name": "workflow01",
+                    "auth": {
+                        "member": {
+                            "add": true,
+                            "update": true,
+                            "delete": true
+                        },
+                        "book": {
+                            "create": true
+                        }
+                    },
+                    "lastLoginAt": "2020-05-26T17:15:60.604+09:00",
+                    "passwordChangedFlg": false,
+                    "attributes": {},
+                    "roles": [
+                        {
+                            "_value": "9",
+                            "_ver": "1"
+                        }
+                    ],
+                    "block": {
+                        "_value": 1000111,
+                        "_ver": 1
+                    },
+                    "actor": {
+                        "_value": 1000114,
+                        "_ver": 1
+                    },
+                    "service": {
+                        "_value": 0,
+                        "_ver": 1
+                    }
+                }).end();
             } else if (session === 'application') {
                 res.status(200).json({
                     "sessionId": "dfb97effad14e3c99d5fb32cdce61137bb440ea4f6b490fb65696b2725e147f3",
@@ -1687,6 +1771,84 @@ export class StubOperatorServer extends BaseStubServer {
                     },
                     "actor": {
                         "_value": 1000114,
+                        "_ver": 1
+                    }
+                }).end();
+            } else if (session === 'applicationWithService') {
+                res.status(200).json({
+                    "sessionId": "dfb97effad14e3c99d5fb32cdce61137bb440ea4f6b490fb65696b2725e147f3",
+                    "operatorId": 1,
+                    "type": 2,
+                    "loginId": "application01",
+                    "name": "application01",
+                    "auth": {
+                        "member": {
+                            "add": true,
+                            "update": true,
+                            "delete": true
+                        },
+                        "book": {
+                            "create": true
+                        }
+                    },
+                    "lastLoginAt": "2020-05-26T17:15:60.604+09:00",
+                    "passwordChangedFlg": false,
+                    "attributes": {},
+                    "roles": [
+                        {
+                            "_value": "1000010",
+                            "_ver": "1"
+                        }
+                    ],
+                    "block": {
+                        "_value": 1000111,
+                        "_ver": 1
+                    },
+                    "actor": {
+                        "_value": 1000114,
+                        "_ver": 1
+                    },
+                    "service": {
+                        "_value": 1000010,
+                        "_ver": 1
+                    }
+                }).end();
+            } else if (session === 'applicationInvalidSession') {
+                res.status(200).json({
+                    "sessionId": "dfb97effad14e3c99d5fb32cdce61137bb440ea4f6b490fb65696b2725e147f3",
+                    "operatorId": 1,
+                    "type": 2,
+                    "loginId": "application01",
+                    "name": "application01",
+                    "auth": {
+                        "member": {
+                            "add": true,
+                            "update": true,
+                            "delete": true
+                        },
+                        "book": {
+                            "create": true
+                        }
+                    },
+                    "lastLoginAt": "2020-05-26T17:15:60.604+09:00",
+                    "passwordChangedFlg": false,
+                    "attributes": {},
+                    "roles": [
+                        {
+                            "_value": "0",
+                            "_ver": "1"
+                        }
+                    ],
+                    "block": {
+                        "_value": 1000111,
+                        "_ver": 1
+                    },
+                    "actor": {
+                        "_value": 1000114,
+                        "_ver": 1
+                    },
+                    "service": {
+                        "_value": 0,
                         "_ver": 1
                     }
                 }).end();

@@ -81,10 +81,7 @@ export class EmptyResponseStubBookManageServer extends BaseStubServer {
             });
         } if (path !== '/book-manage/search/user') {
             this.app.post('/book-manage/search/user', (req, res) => {
-                res.status(200).json([{
-                    pxrId: 'pxr_user00',
-                    bookStatus: 0,
-                }, {
+                res.status(200).json({
                     pxrId: 'pxr_user01',
                     bookStatus: 0,
                     cooperation: [{
@@ -94,17 +91,96 @@ export class EmptyResponseStubBookManageServer extends BaseStubServer {
                         },
                         userId: 'xxx_yyy.wf1'
                     }]
-                }, {
-                    pxrId: 'pxr_user02',
-                    bookStatus: 0,
-                    cooperation: [{
+                }).end();
+            });
+        } if (path !== '/book-manage/settings/store/:id') {
+            this.app.get('/book-manage/settings/store/:id', (req, res) => {
+                const id = req.params.id;
+                if (id === 'id_user_') {
+                    res.status(200).json({
+                        id: 1,
+                        bookId: 1,
+                        regionUseId: null,
+                        type: 'store',
                         actor: {
-                            _value: 10002,
+                            _value: 4444444,
                             _ver: 1
                         },
-                        userId: 'xxx_yyy.wf3'
-                    }]
-                }]).end();
+                        app: null,
+                        wf: {
+                            _value: 1000007,
+                            _ver: 1
+                        }
+                    }).end();
+                } else if (id === '_user_id') {
+                    res.status(200).json({
+                        id: 1,
+                        bookId: 1,
+                        regionUseId: null,
+                        type: 'store',
+                        actor: {
+                            _value: 4444444,
+                            _ver: 1
+                        },
+                        app: null,
+                        wf: {
+                            _value: 1000007,
+                            _ver: 1
+                        },
+                        document: [
+                            {
+                                _value: 1000500,
+                                _ver: 1
+                            }
+                        ],
+                        event: [
+                            {
+                                _value: 10,
+                                _ver: 1
+                            }
+                        ],
+                        thing: [
+                            {
+                                _value: 10,
+                                _ver: 1
+                            }
+                        ]
+                    }).end();
+                } else {
+                    res.status(200).json({
+                        id: 1,
+                        bookId: 1,
+                        regionUseId: null,
+                        type: 'store',
+                        actor: {
+                            _value: 4444444,
+                            _ver: 1
+                        },
+                        app: null,
+                        wf: {
+                            _value: 1000007,
+                            _ver: 1
+                        },
+                        document: [
+                            {
+                                _value: 1000500,
+                                _ver: 1
+                            }
+                        ],
+                        event: [
+                            {
+                                _value: 1000009,
+                                _ver: 1
+                            }
+                        ],
+                        thing: [
+                            {
+                                _value: 1000014,
+                                _ver: 1
+                            }
+                        ]
+                    }).end();
+                }
             });
         }
         this.app.get(path, (req, res) => {

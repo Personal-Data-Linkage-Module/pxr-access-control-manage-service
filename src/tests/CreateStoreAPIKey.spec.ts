@@ -6,9 +6,10 @@ https://opensource.org/licenses/mit-license.php
 import supertest = require('supertest');
 import Application from '../index';
 import Config from '../common/Config';
-import { EmptyResponseStubAccessControlServer } from './NonDataStubs';
+import { EmptyResponseStubAccessControlServer, EmptyResponseStubBookManageServer } from './NonDataStubs';
 import { StubCatalogServer, StubAccessControlServer, StubOperatorServer, StubBookManageServer, StubIdServiceServer } from './StubServer';
 import { sprintf } from 'sprintf-js';
+import IdService from '../services/IdService_Stub';
 const Message = Config.ReadConfig('./config/message.json');
 /* eslint-enable */
 
@@ -20,6 +21,7 @@ const BookManageServer = new StubBookManageServer();
 let IdServiceServer: StubIdServiceServer = null;
 // レスポンスが0件系
 const NonData_AccessControlServer = new EmptyResponseStubAccessControlServer();
+const NonData_BookManageServer_SearchAPI = new EmptyResponseStubBookManageServer('/book-manage/search/user');
 
 // アプリケーション
 const expressApp = Application.express.app;
@@ -584,12 +586,10 @@ describe('Access-Control Manage Service.Create store API Key', () => {
     beforeAll(async () => {
         await Application.start();
         await OperatorServer.start();
-        await BookManageServer.start();
     });
     afterAll(async () => {
         await Application.stop();
         await OperatorServer.stop();
-        await BookManageServer.stop();
     });
 
     /**
@@ -610,9 +610,11 @@ describe('Access-Control Manage Service.Create store API Key', () => {
     describe('データ蓄積APIトークン生成指示 POST: ' + baseURI, () => {
         beforeAll(async () => {
             await AccessControlServer.start();
+            await BookManageServer.start();
         });
         afterAll(async () => {
             await AccessControlServer.stop();
+            await BookManageServer.stop();
         });
         test('正常系: データ蓄積APIトークン生成指示(APP, ドキュメント)', async () => {
             // スタブサーバー起動
@@ -719,6 +721,8 @@ describe('Access-Control Manage Service.Create store API Key', () => {
             expect(response.status).toBe(200);
         });
         test('正常系: データ蓄積APIトークン生成指示(APP, モノ)、アクセストークン検証要否判定：要', async () => {
+            // IdServiceのスタブの戻り値を設定
+            IdService.getPxrId = jest.fn().mockReturnValue('pxr_user01');
             // スタブサーバー起動
             CatalogServer = new StubCatalogServer(true);
             await CatalogServer.start();
@@ -914,7 +918,7 @@ describe('Access-Control Manage Service.Create store API Key', () => {
                 expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 400, message: Message.NOT_EXIST_ACCESS_TOKEN }));
                 expect(response.status).toBe(400);
         });
-        test('異常系: アクセストークン検証、IDコネクトから取得したPXR-ID不一致', async () => {
+        test('異常系: アクセストークン検証、IDサービスから取得したPXR-ID不一致', async () => {
             // スタブサーバー起動
             CatalogServer = new StubCatalogServer(true);
             await CatalogServer.start();
@@ -1014,9 +1018,11 @@ describe('Access-Control Manage Service.Create store API Key', () => {
     });
     describe('データ蓄積APIトークン生成指示 POST: ' + baseURI, () => {
         beforeAll(async () => {
+            await BookManageServer.start();
             await NonData_AccessControlServer.start();
         });
         afterAll(async () => {
+            await BookManageServer.stop();
             await NonData_AccessControlServer.stop();
         });
         test('正常系: データ蓄積APIトークン生成指示(空)', async () => {
@@ -1037,6 +1043,93 @@ describe('Access-Control Manage Service.Create store API Key', () => {
 
             expect(JSON.stringify(response.body)).toBe(JSON.stringify({}));
             expect(response.status).toBe(204);
+        });
+    });
+
+    describe('利用者ID重複対応追加ケース データ蓄積APIトークン生成指示 POST:', () => {
+        describe('正常系 ' + baseURI, () => {
+            //DoRequestメソッドのmock化
+            const doRequet = require('../common/DoRequest');
+            const mockDoRequest = jest.spyOn(doRequet, 'doRequest');
+            beforeAll(async () => {
+                await AccessControlServer.start();
+                await BookManageServer.start();
+            });
+            afterAll(async () => {
+                await AccessControlServer.stop();
+                await BookManageServer.stop();
+                mockDoRequest.mockRestore();
+            });
+            beforeEach(async () => {
+                mockDoRequest.mockClear();
+            });
+            test('正常: オペレーター: アプリケーション', async () => {
+                // スタブサーバー起動
+                CatalogServer = new StubCatalogServer();
+                await CatalogServer.start();
+                IdServiceServer = new StubIdServiceServer(200, 200);
+                await IdServiceServer.start();
+
+                const response = await supertest(expressApp)
+                    .post(baseURI)
+                    .set('Cookie', ['operator_type2_session=application'])
+                    .set({
+                        'access-token': 'access-token',
+                        accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    })
+                    .send(dataApp);
+                expect(JSON.stringify(response.body)).toBe(JSON.stringify([{
+                    apiUrl: 'a',
+                    apiMethod: 'post',
+                    apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                    userId: 'a',
+                    expirationDate: response.body[0].expirationDate,
+                    blockCode: 1000109
+                }]));
+                expect(response.status).toBe(200);
+                // Book管理サービス.ユーザー取得API へのリクエストの確認
+                const apiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3005/book-manage/search/user/');
+                for (const apiInfo of apiInfos) {
+                    expect(apiInfo[2]).toBe(JSON.stringify({
+                        actor: 1000114,
+                        app: 1000010,
+                        wf: null,
+                        userId: 'taro_yamada'
+                    }));
+                }
+            });
+        });
+        describe('異常系 ' + baseURI, () => {
+            describe('Book管理サービス.ユーザー取得APIの結果が 0件 ', () => {
+                beforeAll(async () => {
+                    await AccessControlServer.start();
+                    await NonData_BookManageServer_SearchAPI.start();
+                });
+                afterAll(async () => {
+                    await AccessControlServer.stop();
+                    await NonData_BookManageServer_SearchAPI.stop();
+                });
+                test('異常: Book管理サービス.ユーザー取得APIの結果が 0件 オペレーター: アプリケーション', async () => {
+                    // スタブサーバー起動
+                    CatalogServer = new StubCatalogServer(true);
+                    await CatalogServer.start();
+                    IdServiceServer = new StubIdServiceServer(200, 200);
+                    await IdServiceServer.start();
+                    const response = await supertest(expressApp)
+                        .post(baseURI)
+                        .set('Cookie', ['operator_type2_session=application_token'])
+                        .set({
+                            'access-token': 'access-token',
+                            accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        })
+                        .send(dataApp);
+    
+                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 400, message: 'Book管理サービス.My-Condition-Book一覧が0件でした' }));
+                    expect(response.status).toBe(400);
+                });
+            });
         });
     });
 });
