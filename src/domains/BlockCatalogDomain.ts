@@ -16,48 +16,48 @@ import { Expose, Type } from 'class-transformer';
 export class CodeObject {
     @IsNumber()
     @IsDefined()
-    _value: number;
+        _value: number;
 
     @IsNumber()
     @IsOptional()
-    _ver: number;
+        _ver: number;
 }
 
 export class CatalogItem {
     @IsString()
     @IsDefined()
-    ns: string;
+        ns: string;
 
     @IsString()
     @IsDefined()
-    name: string;
+        name: string;
 
     @Type(() => CodeObject)
     @ValidateNested()
     @IsDefined()
-    _code: CodeObject;
+        _code: CodeObject;
 
     @Type(() => CodeObject)
     @ValidateNested()
     @IsDefined()
-    inherit: CodeObject;
+        inherit: CodeObject;
 }
 
 export class Template {
     @IsString()
     @IsDefined()
     @Expose({ name: 'actor-type' })
-    actorType: string;
+        actorType: string;
 
     @IsString()
     @IsDefined()
     @Expose({ name: 'base-url' })
-    baseUrl: string;
+        baseUrl: string;
 
     @IsString()
     @IsDefined()
     @Expose({ name: 'service-name' })
-    serviceName: string;
+        serviceName: string;
 }
 
 /**
@@ -67,10 +67,10 @@ export default class BlockCatalogDomain {
     @Type(() => CatalogItem)
     @ValidateNested()
     @IsDefined()
-    catalogItem: CatalogItem;
+        catalogItem: CatalogItem;
 
     @Type(() => Template)
     @ValidateNested()
     @IsDefined()
-    template: Template;
+        template: Template;
 }

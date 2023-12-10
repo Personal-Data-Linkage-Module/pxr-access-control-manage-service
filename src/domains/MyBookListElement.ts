@@ -14,28 +14,28 @@ export class Cooperation {
     @IsDefined()
     @ValidateNested({ each: false })
     @Type(type => CodeObject)
-    actor: CodeObject;
+        actor: CodeObject;
 
     /**
      * userId
      */
     @IsOptional()
     @IsString()
-    userId: string;
+        userId: string;
 }
 
 export default class {
     @IsString()
     @IsNotEmpty()
-    pxrId: string;
+        pxrId: string;
 
     @IsNumber()
     @IsNotEmpty()
-    bookStatus: number;
+        bookStatus: number;
 
     @IsArray()
     @IsOptional()
     @ValidateNested({ each: false })
     @Type(type => Cooperation)
-    cooperation: Cooperation[];
+        cooperation: Cooperation[];
 }

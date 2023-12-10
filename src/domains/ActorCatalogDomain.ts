@@ -19,39 +19,39 @@ export class CodeObject {
     @IsNumber()
     @IsDefined()
     @Transform(transformToNumber)
-    _value: number;
+        _value: number;
 
     @IsNumber()
     @IsOptional()
     @Transform(transformToNumber)
-    _ver: number;
+        _ver: number;
 }
 
 export class CatalogItem {
     @IsString()
     @IsNotEmpty()
-    ns: string;
+        ns: string;
 
     @IsString()
     @IsNotEmpty()
-    name: string;
+        name: string;
 
     @Type(() => CodeObject)
     @ValidateNested()
     @IsDefined()
-    _code: CodeObject;
+        _code: CodeObject;
 
     @Type(() => CodeObject)
     @ValidateNested()
     @IsDefined()
-    inherit: CodeObject;
+        inherit: CodeObject;
 }
 
 export class Template {
     @IsDefined()
     @ValidateNested()
     @Type(type => CodeObject)
-    'main-block': CodeObject;
+        'main-block': CodeObject;
 }
 
 /**
@@ -61,10 +61,10 @@ export default class ActorCatalogDomain {
     @Type(() => CatalogItem)
     @ValidateNested()
     @IsDefined()
-    catalogItem: CatalogItem;
+        catalogItem: CatalogItem;
 
     @Type(type => Template)
     @ValidateNested()
     @IsDefined()
-    template: Template;
+        template: Template;
 }

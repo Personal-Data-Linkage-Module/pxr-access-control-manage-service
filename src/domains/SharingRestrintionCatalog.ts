@@ -12,95 +12,95 @@ export class Service {
     @IsOptional()
     @Type(type => CodeObject)
     @ValidateNested()
-    region: CodeObject;
+        region: CodeObject;
 
     @IsOptional()
     @IsArray()
     @Type(type => CodeObject)
     @ValidateNested({ each: true })
-    service: CodeObject[];
+        service: CodeObject[];
 }
 
 export class DocEvent {
     @IsOptional()
     @Type(type => CodeObject)
     @ValidateNested()
-    code: CodeObject;
+        code: CodeObject;
 
     @IsOptional()
     @IsArray()
     @Type(type => CodeObject)
     @ValidateNested({ each: true })
-    thing: CodeObject[];
+        thing: CodeObject[];
 }
 
 export class Document {
     @IsOptional()
     @Type(type => CodeObject)
     @ValidateNested()
-    code: CodeObject;
+        code: CodeObject;
 
     @IsOptional()
     @IsArray()
     @Type(type => DocEvent)
     @ValidateNested({ each: true })
-    event: DocEvent[];
+        event: DocEvent[];
 
     @IsOptional()
     @IsArray()
     @Type(type => Service)
     @ValidateNested({ each: true })
-    permission: Service[];
+        permission: Service[];
 
     @IsOptional()
     @IsArray()
     @Type(type => Service)
     @ValidateNested({ each: true })
-    prohibition: Service[];
+        prohibition: Service[];
 }
 
 export class Event {
     @IsOptional()
     @Type(type => CodeObject)
     @ValidateNested()
-    code: CodeObject;
+        code: CodeObject;
 
     @IsOptional()
     @IsArray()
     @Type(type => CodeObject)
     @ValidateNested({ each: true })
-    thing: CodeObject[];
+        thing: CodeObject[];
 
     @IsOptional()
     @IsArray()
     @Type(type => Service)
     @ValidateNested({ each: true })
-    permission: Service[];
+        permission: Service[];
 
     @IsOptional()
     @IsArray()
     @Type(type => Service)
     @ValidateNested({ each: true })
-    prohibition: Service[];
+        prohibition: Service[];
 }
 
 export class Thing {
     @IsOptional()
     @Type(type => CodeObject)
     @ValidateNested()
-    code: CodeObject;
+        code: CodeObject;
 
     @IsOptional()
     @IsArray()
     @Type(type => Service)
     @ValidateNested({ each: true })
-    permission: Service[];
+        permission: Service[];
 
     @IsOptional()
     @IsArray()
     @Type(type => Service)
     @ValidateNested({ each: true })
-    prohibition: Service[];
+        prohibition: Service[];
 }
 
 export class Template {
@@ -108,19 +108,19 @@ export class Template {
     @IsArray()
     @Type(type => Document)
     @ValidateNested({ each: true })
-    document: Document[];
+        document: Document[];
 
     @IsOptional()
     @IsArray()
     @Type(type => Event)
     @ValidateNested({ each: true })
-    event: Event[];
+        event: Event[];
 
     @IsOptional()
     @IsArray()
     @Type(type => Thing)
     @ValidateNested({ each: true })
-    thing: Thing[];
+        thing: Thing[];
 }
 
 export default class {
@@ -128,5 +128,5 @@ export default class {
     @IsObject()
     @ValidateNested()
     @Type(type => Template)
-    template: Template;
+        template: Template;
 }
