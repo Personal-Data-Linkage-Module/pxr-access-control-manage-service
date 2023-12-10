@@ -79,7 +79,6 @@ export class StubCatalogServer extends BaseStubServer {
     constructor(useIdService?: boolean, type?: string) {
         super();
         this.app.get('/catalog/name', (req, res) => {
-            const code = parseInt(req.params.code);
             res.status(200).json({
                 "ext_name": "test-org"
             }).end();
