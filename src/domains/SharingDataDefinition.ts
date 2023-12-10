@@ -12,7 +12,7 @@ import { CodeObject as _CodeObject } from '../resources/dto/CreateAPIKeyReqDto';
 export class CodeObject {
     @IsDefined()
     @IsNumber()
-    @Transform(transformToNumber)
+    @Transform(({ value }) => { return transformToNumber(value); })
         _value: number;
 }
 

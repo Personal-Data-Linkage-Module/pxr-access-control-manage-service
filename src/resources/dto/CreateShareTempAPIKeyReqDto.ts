@@ -12,12 +12,12 @@ import { OperatorObject, TargetObject } from './CreateAPIKeyReqDto';
 export class CodeObject {
     @IsNumber()
     @IsDefined()
-    @Transform(transformToNumber)
+    @Transform(({ value }) => { return transformToNumber(value); })
         _value: number;
 
     @IsNumber()
     @IsDefined()
-    @Transform(transformToNumber)
+    @Transform(({ value }) => { return transformToNumber(value); })
         _ver: number;
 }
 
@@ -50,7 +50,7 @@ export class CallerObject {
     @IsDefined()
         apiCode: string;
 
-    @Transform(transformToNumber)
+    @Transform(({ value }) => { return transformToNumber(value); })
     @IsNumber()
     @IsOptional()
         blockCode: number;

@@ -15,12 +15,12 @@ import { Type, Transform } from 'class-transformer';
 import { transformToNumber } from '../../common/Transform';
 
 export class CodeObject {
-    @Transform(transformToNumber)
+    @Transform(({ value }) => { return transformToNumber(value); })
     @IsNumber()
     @IsDefined()
         _value: number;
 
-    @Transform(transformToNumber)
+    @Transform(({ value }) => { return transformToNumber(value); })
     @IsNumber()
     @IsDefined()
         _ver: number;
@@ -56,7 +56,7 @@ export class CallerObject {
     @IsDefined()
         apiCode: string;
 
-    @Transform(transformToNumber)
+    @Transform(({ value }) => { return transformToNumber(value); })
     @IsNumber()
     @IsOptional()
         blockCode: number;
@@ -95,7 +95,7 @@ export class TargetObject {
     @IsDefined()
         apiMethod: string;
 
-    @Transform(transformToNumber)
+    @Transform(({ value }) => { return transformToNumber(value); })
     @IsNumber()
     @IsOptional()
         blockCode: number;
