@@ -12,13 +12,13 @@ import { CodeObject as _CodeObject } from '../resources/dto/CreateAPIKeyReqDto';
 export class CodeObject {
     @IsNumber()
     @IsDefined()
-    @Transform(transformToNumber)
-    _value: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        _value: number;
 
     @IsNumber()
     @IsDefined()
-    @Transform(transformToNumber)
-    _ver: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        _ver: number;
 }
 
 export class CToken {
@@ -27,36 +27,36 @@ export class CToken {
     @IsObject()
     @ValidateNested()
     @Type(type => CodeObject)
-    actor: CodeObject;
+        actor: CodeObject;
 
     @IsOptional()
     @IsNotEmptyObject()
     @IsObject()
     @ValidateNested()
     @Type(type => CodeObject)
-    app: CodeObject;
+        app: CodeObject;
 
     @IsOptional()
     @IsNotEmptyObject()
     @IsObject()
     @ValidateNested()
     @Type(type => CodeObject)
-    wf: CodeObject;
+        wf: CodeObject;
 
     @IsString()
     @IsDefined()
-    createdAt: string;
+        createdAt: string;
 
     @IsDefined()
     @IsNotEmptyObject()
     @IsObject()
     @ValidateNested()
     @Type(type => CodeObject)
-    code: CodeObject;
+        code: CodeObject;
 
     @IsString()
     @IsDefined()
-    identifier: string;
+        identifier: string;
 }
 
 export default class {
@@ -64,29 +64,29 @@ export default class {
     @IsArray()
     @Type(type => CToken)
     @ValidateNested({ each: true })
-    document: CToken[];
+        document: CToken[];
 
     @IsOptional()
     @IsArray()
     @Type(type => CToken)
     @ValidateNested({ each: true })
-    event: CToken[];
+        event: CToken[];
 
     @IsOptional()
     @IsArray()
     @Type(type => CToken)
     @ValidateNested({ each: true })
-    thing: CToken[];
+        thing: CToken[];
 
     @IsBoolean()
     @IsDefined()
-    isDocument: boolean;
+        isDocument: boolean;
 
     @IsBoolean()
     @IsDefined()
-    isEvent: boolean;
+        isEvent: boolean;
 
     @IsBoolean()
     @IsDefined()
-    isThing: boolean;
+        isThing: boolean;
 }

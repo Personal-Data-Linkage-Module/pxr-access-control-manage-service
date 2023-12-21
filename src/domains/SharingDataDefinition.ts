@@ -12,8 +12,8 @@ import { CodeObject as _CodeObject } from '../resources/dto/CreateAPIKeyReqDto';
 export class CodeObject {
     @IsDefined()
     @IsNumber()
-    @Transform(transformToNumber)
-    _value: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        _value: number;
 }
 
 export class ShareObject {
@@ -21,7 +21,7 @@ export class ShareObject {
     @IsObject()
     @Type(type => _CodeObject)
     @ValidateNested()
-    code: _CodeObject;
+        code: _CodeObject;
 }
 
 export default class {
@@ -32,23 +32,23 @@ export default class {
     @IsObject()
     @Type(type => CodeObject)
     @ValidateNested()
-    actor: CodeObject;
+        actor: CodeObject;
 
     @IsOptional()
     @IsObject()
     @Type(type => CodeObject)
     @ValidateNested()
-    app: CodeObject;
+        app: CodeObject;
 
     @IsOptional()
     @IsObject()
     @Type(type => CodeObject)
     @ValidateNested()
-    wf: CodeObject;
+        wf: CodeObject;
 
     @IsDefined()
     @IsArray()
     @Type(type => ShareObject)
     @ValidateNested()
-    share: ShareObject[];
+        share: ShareObject[];
 }
