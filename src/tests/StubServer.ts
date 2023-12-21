@@ -5,6 +5,7 @@ https://opensource.org/licenses/mit-license.php
 /* eslint-disable */
 import express = require('express');
 import { Server } from 'net';
+import { RequestHandler } from 'express';
 import bodyParser = require('body-parser');
 import BLOCK_CATALOG = require('./catalog/1000109.json');
 import ROOT_BLOCK_CATALOG = require('./catalog/1000110.json');
@@ -59,8 +60,8 @@ export class BaseStubServer {
 
     constructor() {
         this.app = express();
-        this.app.use(bodyParser.json({ limit: '100mb' }));
-        this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(bodyParser.json({ limit: '100mb' }) as RequestHandler);
+        this.app.use(bodyParser.urlencoded({ extended: false }) as RequestHandler);
     }
 
     async start() {
@@ -80,7 +81,6 @@ export class StubCatalogServer extends BaseStubServer {
     constructor(useIdService?: boolean, type?: string) {
         super();
         this.app.get('/catalog/name', (req, res) => {
-            const code = parseInt(req.params.code);
             res.status(200).json({
                 "ext_name": "test-org"
             }).end();

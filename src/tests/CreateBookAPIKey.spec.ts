@@ -266,29 +266,29 @@ describe('Access-Control Manage Service.Create Book API Key', () => {
                 expect(response.status).toBe(204);
             });
         });
-        describe('カタログサービス', () => {
-            beforeAll(async () => {
-                await AccessControlServer.start();
-                await NonData_CatalogServer_NsSearch.start();
-            });
-            afterAll(async () => {
-                await AccessControlServer.stop();
-                await NonData_CatalogServer_NsSearch.stop();
-            });
-        });
+        // describe('カタログサービス', () => {
+        //     beforeAll(async () => {
+        //         await AccessControlServer.start();
+        //         await NonData_CatalogServer_NsSearch.start();
+        //     });
+        //     afterAll(async () => {
+        //         await AccessControlServer.stop();
+        //         await NonData_CatalogServer_NsSearch.stop();
+        //     });
+        // });
     });
-    describe('Book操作時トークン生成指示API 連携サービスからのレスポンスが期待しないデータ型 POST: ' + baseURI, () => {
-        describe('カタログサービス', () => {
-            beforeAll(async () => {
-                await AccessControlServer.start();
-                await WrongData_CatalogServer_NsSearch.start();
-            });
-            afterAll(async () => {
-                await AccessControlServer.stop();
-                await WrongData_CatalogServer_NsSearch.stop();
-            });
-        });
-    });
+    // describe('Book操作時トークン生成指示API 連携サービスからのレスポンスが期待しないデータ型 POST: ' + baseURI, () => {
+    //     describe('カタログサービス', () => {
+    //         beforeAll(async () => {
+    //             await AccessControlServer.start();
+    //             await WrongData_CatalogServer_NsSearch.start();
+    //         });
+    //         afterAll(async () => {
+    //             await AccessControlServer.stop();
+    //             await WrongData_CatalogServer_NsSearch.stop();
+    //         });
+    //     });
+    // });
     describe('Book操作時トークン生成指示API 連携サービスが停止 POST: ' + baseURI, () => {
         describe('カタログサービス', () => {
             beforeAll(async () => {
