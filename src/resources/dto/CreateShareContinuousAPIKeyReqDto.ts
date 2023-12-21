@@ -12,113 +12,113 @@ import { OperatorObject, TargetObject } from './CreateAPIKeyReqDto';
 export class CodeObject {
     @IsNumber()
     @IsDefined()
-    @Transform(transformToNumber)
-    _value: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        _value: number;
 
     @IsNumber()
     @IsDefined()
-    @Transform(transformToNumber)
-    _ver: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        _ver: number;
 }
 
 export class Destination {
     @IsNumber()
     @IsDefined()
-    @Transform(transformToNumber)
-    actor: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        actor: number;
 
     @IsNumber()
     @IsOptional()
-    @Transform(transformToNumber)
-    app: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        app: number;
 
     @IsNumber()
     @IsOptional()
-    @Transform(transformToNumber)
-    wf: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        wf: number;
 }
 
 export class RequestBody {
     @IsString()
     @IsNotEmpty()
-    userId: string;
+        userId: string;
 
     @IsOptional()
     @IsArray()
     @Type(type => CodeObject)
     @ValidateNested({ each: true })
-    document: CodeObject[];
+        document: CodeObject[];
 
     @IsOptional()
     @IsArray()
     @Type(type => CodeObject)
     @ValidateNested({ each: true })
-    event: CodeObject[];
+        event: CodeObject[];
 
     @IsOptional()
     @IsArray()
     @Type(type => CodeObject)
     @ValidateNested({ each: true })
-    thing: CodeObject[];
+        thing: CodeObject[];
 
     @IsOptional()
     @Type(type => CodeObject)
     @ValidateNested()
-    actor: CodeObject;
+        actor: CodeObject;
 
     @IsOptional()
     @Type(type => Destination)
     @ValidateNested()
-    dest: Destination;
+        dest: Destination;
 }
 
 export class CallerObject {
     @IsUUID('all')
     @IsDefined()
-    apiCode: string;
+        apiCode: string;
 
-    @Transform(transformToNumber)
+    @Transform(({ value }) => { return transformToNumber(value); })
     @IsNumber()
     @IsOptional()
-    blockCode: number;
+        blockCode: number;
 
     @IsString()
     @IsDefined()
-    apiUrl: string;
+        apiUrl: string;
 
     @IsString()
     @IsDefined()
-    apiMethod: string;
+        apiMethod: string;
 
     @IsString()
     @IsOptional()
-    userId: string;
+        userId: string;
 
     @IsString()
     @IsOptional()
-    identificationCode: string;
+        identificationCode: string;
 
     @IsDefined()
     @Type(() => OperatorObject)
     @ValidateNested()
-    operator: OperatorObject;
+        operator: OperatorObject;
 
     @IsDefined()
     @ValidateNested({ each: false })
     @Type(type => RequestBody)
     @IsObject()
     @IsNotEmptyObject()
-    requestBody: RequestBody;
+        requestBody: RequestBody;
 }
 
 export default class {
     @IsDefined()
     @Type(() => CallerObject)
     @ValidateNested()
-    caller: CallerObject;
+        caller: CallerObject;
 
     @IsDefined()
     @Type(() => TargetObject)
     @ValidateNested()
-    target: TargetObject;
+        target: TargetObject;
 }
