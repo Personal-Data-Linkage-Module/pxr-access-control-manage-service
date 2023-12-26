@@ -7,19 +7,19 @@ import { IsString, IsDefined, IsOptional } from 'class-validator';
 export default class AccessControllerResult {
     @IsString()
     @IsDefined()
-    apiUrl: string;
+        apiUrl: string;
 
     @IsString()
     @IsDefined()
-    apiMethod: string;
+        apiMethod: string;
 
     @IsString()
     @IsDefined()
-    apiToken: string;
+        apiToken: string;
 
     @IsString()
     @IsOptional()
-    userId: string;
+        userId: string;
 
     blockCode: number;
 

@@ -59,18 +59,18 @@ export default class {
             let app = null;
             let pxrId = null;
             let destActor = null;
+            let user = null;
             if (dest) {
-                const user = await BookManageService.getUserInfoOnlyOne(operator, userId, dest.actor);
-                pxrId = user.pxrId;
+                destActor = dest.actor;
                 wf = undefined;
                 app = dest.app ? dest.app : undefined;
-                destActor = dest.actor;
             } else {
-                const user = await BookManageService.getUserInfoOnlyOne(operator, userId);
-                pxrId = user.pxrId;
+                destActor = operator.actorCode;
                 wf = undefined;
                 app = item.caller.operator.app ? item.caller.operator.app._value : undefined;
             }
+            user = await BookManageService.getUserInfoOnlyOne(operator, userId, destActor, app, wf);
+            pxrId = user.pxrId;
 
             // Region参加チェク
             await CreateAPIKeyService.checkRegionJoin(app, wf, operator);

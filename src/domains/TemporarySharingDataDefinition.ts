@@ -12,64 +12,64 @@ import { CodeObject as _CodeObject } from '../resources/dto/CreateAPIKeyReqDto';
 export class CodeObject {
     @IsDefined()
     @IsNumber()
-    @Transform(transformToNumber)
-    _value: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        _value: number;
 }
 
 export default class {
     @IsDefined()
     @IsNumber()
-    @Transform(transformToNumber)
-    id: number;
+    @Transform(({ value }) => { return transformToNumber(value); })
+        id: number;
 
     @IsNotEmpty()
     @IsString()
-    pxrId: string;
+        pxrId: string;
 
     @IsNotEmpty()
     @IsNumber()
-    status: number;
+        status: number;
 
     @IsDefined()
     @IsNotEmptyObject()
     @IsObject()
     @Type(type => CodeObject)
     @ValidateNested()
-    actor: CodeObject;
+        actor: CodeObject;
 
     @IsOptional()
     @IsNotEmptyObject()
     @IsObject()
     @Type(type => CodeObject)
     @ValidateNested()
-    app: CodeObject;
+        app: CodeObject;
 
     @IsOptional()
     @IsNotEmptyObject()
     @IsObject()
     @Type(type => CodeObject)
     @ValidateNested()
-    wf: CodeObject;
+        wf: CodeObject;
 
     @IsOptional()
     @IsArray()
     @Type(type => _CodeObject)
     @ValidateNested({ each: true })
-    document: _CodeObject[];
+        document: _CodeObject[];
 
     @IsOptional()
     @IsArray()
     @Type(type => _CodeObject)
     @ValidateNested({ each: true })
-    event: _CodeObject[];
+        event: _CodeObject[];
 
     @IsOptional()
     @IsArray()
     @Type(type => _CodeObject)
     @ValidateNested({ each: true })
-    thing: _CodeObject[];
+        thing: _CodeObject[];
 
     @IsOptional()
     @IsArray()
-    identifier: any[];
+        identifier: any[];
 }

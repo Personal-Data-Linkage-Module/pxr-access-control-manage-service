@@ -69,6 +69,12 @@ export default class OperatorDomain {
     /** PXR-ID */
     pxrId?: string;
 
+    /** APP カタログコード */
+    serviceCode?: number;
+
+    /** APP カタログコバージョン */
+    serviceVersion?: number;
+
     /** レスポンスをURIエンコードした結果 */
     encoded: string;
 
@@ -86,6 +92,10 @@ export default class OperatorDomain {
         if (obj.actor && typeof obj.actor === 'object') {
             this.actorCode = parseInt(obj.actor._value);
             this.actorVersion = parseInt(obj.actor._ver);
+        }
+        if (obj.service && typeof obj.service === 'object') {
+            this.serviceCode = parseInt(obj.service._value);
+            this.serviceVersion = parseInt(obj.service._ver);
         }
         this.pxrId = obj.pxrId;
 

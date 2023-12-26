@@ -4,7 +4,7 @@ https://opensource.org/licenses/mit-license.php
 */
 /* eslint-disable */
 import supertest = require('supertest');
-import Application from '../index';
+import { Application } from '../resources/config/Application';
 import { EmptyResponseStubAccessControlServer } from './NonDataStubs';
 import { StubAccessControlServer, StubBookManageServer, StubCatalogServer, StubOperatorServer } from './StubServer';
 /* eslint-enable */
@@ -18,7 +18,8 @@ const BookManageServer = new StubBookManageServer();
 const NonData_AccessControlServer = new EmptyResponseStubAccessControlServer();
 
 // アプリケーション
-const expressApp = Application.express.app;
+const app = new Application();
+const expressApp = app.express.app;
 const baseURI = '/access-control-manage/block';
 
 // リクエストデータ
@@ -89,18 +90,18 @@ const dataWithRole = [{
     }
 }];
 
+app.start();
 /**
  * Block間APIトークン生成指示
  */
 describe('Access-Control Manage Service.Create Block API Key', () => {
     beforeAll(async () => {
-        await Application.start();
         await CatalogServer.start();
         await OperatorServer.start();
         await BookManageServer.start();
     });
     afterAll(async () => {
-        await Application.stop();
+        app.stop();
         await CatalogServer.stop();
         await OperatorServer.stop();
         await BookManageServer.stop();

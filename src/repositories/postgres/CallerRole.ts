@@ -15,23 +15,23 @@ export default class CallerRole extends BaseEntity {
 
     /** 作成履歴 */
     @Column({ type: 'bigint', nullable: false, default: false, name: 'created_history_id' })
-    createdHistoryId: number;
+        createdHistoryId: number;
 
     /** 呼び出しロールカタログコード */
     @Column({ type: 'bigint', nullable: false, default: false, name: 'caller_role_catalog_code' })
-    callerRoleCatalogCode: number;
+        callerRoleCatalogCode: number;
 
     /** 呼び出しロールカタログバージョン */
     @Column({ type: 'bigint', nullable: false, default: false, name: 'caller_role_catalog_version' })
-    callerRoleCatalogVersion: number;
+        callerRoleCatalogVersion: number;
 
     /** 無効フラグ */
     @Column({ type: 'boolean', nullable: false, default: false, name: 'is_disabled' })
-    isDisabled: boolean = false;
+        isDisabled: boolean = false;
 
     /** 登録者 */
     @Column({ type: 'varchar', length: 255, nullable: false, name: 'created_by' })
-    createdBy: string = '';
+        createdBy: string = '';
 
     /** 登録日時 */
     @CreateDateColumn({ type: 'timestamp without time zone', name: 'created_at', default: 'now()' })
@@ -39,7 +39,7 @@ export default class CallerRole extends BaseEntity {
 
     /** 更新者 */
     @Column({ type: 'varchar', length: 255, nullable: false, name: 'updated_by' })
-    updatedBy: string = '';
+        updatedBy: string = '';
 
     /** 更新日時 */
     @UpdateDateColumn({ type: 'timestamp without time zone', name: 'updated_at', onUpdate: 'now()' })
@@ -50,5 +50,5 @@ export default class CallerRole extends BaseEntity {
         tokenGenerationHistory => tokenGenerationHistory.callerRole
     )
     @JoinColumn({ name: 'created_history_id', referencedColumnName: 'id' })
-    tokenGenerationHistory: TokenGenerationHistory;
+        tokenGenerationHistory: TokenGenerationHistory;
 }
