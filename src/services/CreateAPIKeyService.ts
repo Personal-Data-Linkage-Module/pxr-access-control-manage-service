@@ -80,18 +80,20 @@ export default class CreateAPIKeyService {
         if (item.target.apiMethod !== 'DELETE') {
             const app = item.caller.operator.app ? item.caller.operator.app._value : null;
             const wf = item.caller.operator.wf ? item.caller.operator.wf._value : null;
+            const actor = operator.actorCode;
 
-            // 蓄積定義の取得
-            const dataStore = await this.takeDataStore(
-                item.caller.userId, app, wf, operator
-            );
-            // データ種を取得する
-            const targetDataType = item.caller.requestBody;
-            const dataTypeObject = await this.checkDataType(
-                dataStore, targetDataType
-            );
-            // データ種を付与
-            item.target.parameter = { dataType: dataTypeObject };
+            // リクエストの配列からデータ種のコード/バージョン配列を取得する
+            const requests: any[] = item.caller.requestBody;
+            const targetDataType = requests.map(elem => elem.code);
+
+            // 蓄積定義による蓄積可否判定
+            const result = await BookManageService.checkStorePermission(
+                item.caller.userId, wf, app, actor, targetDataType, operator);
+
+            if (result.checkResult === true) {
+                // データ種を付与
+                item.target.parameter = JSON.stringify(result.dataType);
+            }
         }
     }
 
@@ -147,87 +149,6 @@ export default class CreateAPIKeyService {
             entities.push(roleEntity);
         }
         entity.callerRole = entities;
-    }
-
-    /**
-     * データ共有定義を取得する
-     * @param userId
-     * @param app
-     * @param wf
-     * @param operator
-     */
-    private static async takeDataStore (
-        userId: string, app: number, wf: number, operator: OperatorDomain
-    ) {
-        // 設定ファイルより、Book管理サービスのURLを取得
-        const bookManageServiceURL =
-            config.get('bookManageService.protocol') + '://' +
-            config.get('bookManageService.first');
-        // Book管理サービスデータ蓄積定義取得APIで蓄積定義を取得する
-        let requestURL;
-        if (app) {
-            requestURL = bookManageServiceURL + userId + '?app=' + app;
-        } else if (wf) {
-            requestURL = bookManageServiceURL + userId + '?wf=' + wf;
-        }
-
-        // リクエストを実行する
-        const result = await doRequest(config.get('bookManageService.protocol'), requestURL, '', 'get', operator);
-        // リクエスト結果からBodyを取り出し、戻り値とする
-        return result.body;
-    }
-
-    /**
-     * データ種をチェック
-     * @param definition
-     * @param dataTypeList
-     * RefactorDescription:
-     *  #3811 : check(inner)
-     */
-    private static async checkDataType (definition: any, dataTypeList: any[]) {
-        // 定義からドキュメントのコード配列を取り出す
-        const documents: any[] = definition['document'] ? definition['document'] : null;
-        // 定義からイベントのコード配列を取り出す
-        const events: any[] = definition['event'] ? definition['event'] : null;
-        // 定義からモノのコード配列を取り出す
-        const things: any[] = definition['thing'] ? definition['thing'] : null;
-        // イベントもモノも空の場合
-        if (!documents && !events && !things) {
-            throw new AppError(Message.IS_NOT_EXISTS_DATA_TYPE, 401);
-        }
-
-        for (const dataType of dataTypeList) {
-            // フラグを初期化
-            let existsflg = false;
-            existsflg = check(documents, dataType);
-            if (!existsflg) {
-                existsflg = check(events, dataType);
-            }
-            // イベントで一致するものが見つからなかった場合
-            if (!existsflg) {
-                existsflg = check(things, dataType);
-            }
-            // 1件でも一致するものが見つからなかった場合エラー
-            if (!existsflg) {
-                throw new AppError(Message.IS_NOT_EXISTS_DATA_TYPE, 401);
-            }
-        }
-        return dataTypeList;
-
-        // データ種が一致するものがあるかチェック
-        function check (dataList: any[], dataType: any) {
-            let exists = false;
-            for (const data of dataList) {
-                if (Number(dataType['code']['_value']) === data['_value'] &&
-                    Number(dataType['code']['_ver']) === data['_ver']
-                ) {
-                    // 一致すればフラグをtrueにする
-                    exists = true;
-                    break;
-                }
-            }
-            return exists;
-        }
     }
 
     /**

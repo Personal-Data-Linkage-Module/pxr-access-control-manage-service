@@ -15,7 +15,6 @@ import checkCertificateRequest from '../common/CheckCertificateRequest';
 import BaseValidator from './validator/BaseValidator';
 import CreateShareContinuousAPIKeyValidator from './validator/CreateShareContinuousAPIKeyValidator';
 import CreateShareContinuousAPIKeyReqDto from './dto/CreateShareContinuousAPIKeyReqDto';
-import CTokenLedgerService from '../services/CTokenLedgerService';
 import CatalogService from '../services/CatalogService';
 import BookManageService from '../services/BookManageService';
 import SharingDataService from '../services/SharingDataService';
@@ -82,74 +81,68 @@ export default class {
                 await CreateAPIKeyService.checkAccessToken(accessToken, 'share', userId, operator.actorCode, app, wf, operator);
             }
 
-            // 共有定義カタログコードの配列を取得する
-            const sharingDefs = await BookManageService.getContinuousSharingDataDefinitionCatalogCodeList(operator, userId, wf, app, destActor);
+            // 共有元の指定
+            const sourceActor = actor ? actor._value : null;
+            const sourceApp = item.caller.requestBody.app ? item.caller.requestBody.app._value : null;
+            const sourceWf = item.caller.requestBody.wf ? item.caller.requestBody.wf._value : null;
 
-            // 共有定義カタログで、リクエストされたデータ種を共有することを許可されているか確認する
-            await SharingDataService.checkAllowedDataDefinition(sharingDefs, operator, document, event, thing);
-
-            let actorCodes: number[] = [];
-            if (actor) {
-                actorCodes.push(actor._value);
-                // 共有元アクターが指定されている場合、
-                await SharingDataService.checkAllowedSharingRestrictionDefinition(actor._value, null, null, operator, document, event, thing, app, wf);
+            let sourceAsset = null;
+            if (sourceApp) {
+                sourceAsset = sourceApp;
             } else {
-                // 共有元アクターが指定されていない場合、CToken台帳サービスにて、CTokenを取得する
-                const documentCTokens = await CTokenLedgerService.getCount(operator, pxrId, document, [], []);
-                const eventCTokens = await CTokenLedgerService.getCount(operator, pxrId, [], event, []);
-                const thingCTokens = await CTokenLedgerService.getCount(operator, pxrId, [], [], thing);
-                const cTokens = documentCTokens.concat(eventCTokens).concat(thingCTokens);
-                actorCodes = [...new Set(cTokens.map(elem => elem.actor._value))];
-                // 取得したCTokenを元に共有先制限定義のチェックを行う
-                for (const cToken of cTokens) {
-                    const ctokenApp = cToken.app ? cToken.app._value : null;
-                    const ctokenWf: number = null;
-                    await SharingDataService.checkAllowedSharingRestrictionDefinition(cToken.actor._value, ctokenApp, ctokenWf, operator, document, event, thing, app, wf);
-                }
+                sourceAsset = sourceWf;
             }
+            // 共有可否チェック
+            const chechResult = await BookManageService.checkSharePermission(userId, wf, app, destActor, document, event, thing, sourceActor, sourceAsset, operator);
 
-            // アクターコード配列をブロックコード配列にする
-            const blockCodes = await CatalogService.getBlockCodesWithActorCodes(actorCodes, operator);
+            if (chechResult.checkResult === true) {
+                // 共有可否チェック結果の共有元分、APIキーを発行する
+                for (const permission of chechResult.permission) {
+                    // アクターコードからブロックコードを取得する
+                    const blockCode = await CatalogService.getBlockCodeWithActorCode(permission.sourceActorCode, operator);
 
-            // ブロックコード分、APIキーを発行する
-            for (const blockCode of blockCodes) {
-                // ドメインを取得する
-                const domains = await CreateAPIKeyService.takeDomain(operator, item.caller.blockCode, blockCode);
+                    // ドメインを取得する
+                    const domains = await CreateAPIKeyService.takeDomain(operator, item.caller.blockCode, blockCode);
 
-                // 宛先パラメーターを欠落させる
-                item.target.parameter = null;
+                    // 宛先パラメーターを設定する
+                    item.target.parameter = JSON.stringify({
+                        document: permission.document,
+                        event: permission.event,
+                        thing: permission.thing
+                    });
 
-                // 宛先のアクセス制御サービス.APIアクセス許可生成 APIをコールする
-                const tokenList = await AccessControlService.create(
-                    domains.toCatalog,
-                    domains.fromCatalog,
-                    item,
-                    operator
-                );
-                // 結果が空であれば、次の処理へ
-                if (!tokenList.length) {
-                    continue;
-                }
-                result.push(...tokenList);
-
-                // トークンリスト（アクセス制御サービスの結果）を元に、エンティティを追加
-                await CreateAPIKeyService.convertTokenList(tokenList, entity, operator, item);
-
-                // ロールの指定により、エンティティを形成
-                await CreateAPIKeyService.convertRoleEntity(item, entity, operator);
-
-                // エンティティのアクセス先ブロックコードを上書き
-                {
-                    const accessHistories = [];
-                    for (const elem of entity.tokenAccessHistory) {
-                        elem.destinationBlockCatalogCode = blockCode;
-                        accessHistories.push(elem);
+                    // 宛先のアクセス制御サービス.APIアクセス許可生成 APIをコールする
+                    const tokenList = await AccessControlService.create(
+                        domains.toCatalog,
+                        domains.fromCatalog,
+                        item,
+                        operator
+                    );
+                    // 結果が空であれば、次の処理へ
+                    if (!tokenList.length) {
+                        continue;
                     }
-                    entity.tokenAccessHistory = accessHistories;
-                }
+                    result.push(...tokenList);
 
-                // エンティティを保存
-                await EntityOperation.saveEntity(entity);
+                    // トークンリスト（アクセス制御サービスの結果）を元に、エンティティを追加
+                    await CreateAPIKeyService.convertTokenList(tokenList, entity, operator, item);
+
+                    // ロールの指定により、エンティティを形成
+                    await CreateAPIKeyService.convertRoleEntity(item, entity, operator);
+
+                    // エンティティのアクセス先ブロックコードを上書き
+                    {
+                        const accessHistories = [];
+                        for (const elem of entity.tokenAccessHistory) {
+                            elem.destinationBlockCatalogCode = blockCode;
+                            accessHistories.push(elem);
+                        }
+                        entity.tokenAccessHistory = accessHistories;
+                    }
+
+                    // エンティティを保存
+                    await EntityOperation.saveEntity(entity);
+                }
             }
         }
 

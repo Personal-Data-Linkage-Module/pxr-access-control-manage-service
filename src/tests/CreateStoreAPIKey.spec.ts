@@ -841,44 +841,6 @@ describe('Access-Control Manage Service.Create store API Key', () => {
             expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 400, message: '利用者IDの指定が必要です' }));
             expect(response.status).toBe(400);
         });
-        test('異常系: データ蓄積APIトークン生成指示(定義が存在しない)', async () => {
-            // スタブサーバー起動
-            CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            IdServiceServer = new StubIdServiceServer(200,200);
-            await IdServiceServer.start();
-
-            const response = await supertest(expressApp)
-                .post(baseURI)
-                .set('Cookie', ['operator_type2_session=application'])
-                .set({
-                    accept: 'application/json',
-                    'Content-Type': 'application/json'
-                })
-                .send(dataAppId);
-
-            expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 401, message: '指定されたデータ種はデータ蓄積定義に設定されていません' }));
-            expect(response.status).toBe(401);
-        });
-        test('異常系: データ蓄積APIトークン生成指示(定義とコードが一致しない)', async () => {
-            // スタブサーバー起動
-            CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            IdServiceServer = new StubIdServiceServer(200,200);
-            await IdServiceServer.start();
-
-            const response = await supertest(expressApp)
-                .post(baseURI)
-                .set('Cookie', ['operator_type2_session=application'])
-                .set({
-                    accept: 'application/json',
-                    'Content-Type': 'application/json'
-                })
-                .send(dataAppThinId);
-
-            expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 401, message: '指定されたデータ種はデータ蓄積定義に設定されていません' }));
-            expect(response.status).toBe(401);
-        });
         test('異常系: データ蓄積APIトークン生成指示(リクエストに対象コードがない)', async () => {
             // スタブサーバー起動
             CatalogServer = new StubCatalogServer();
@@ -1058,7 +1020,6 @@ describe('Access-Control Manage Service.Create store API Key', () => {
             afterAll(async () => {
                 await AccessControlServer.stop();
                 await BookManageServer.stop();
-                mockDoRequest.mockRestore();
             });
             beforeEach(async () => {
                 mockDoRequest.mockClear();
@@ -1128,6 +1089,208 @@ describe('Access-Control Manage Service.Create store API Key', () => {
     
                     expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 400, message: 'Book管理サービス.My-Condition-Book一覧が0件でした' }));
                     expect(response.status).toBe(400);
+                });
+            });
+        });
+    });
+    describe('SNS通知バグ対応追加ケース データ蓄積APIトークン生成指示 POST:', () => {
+        //DoRequestメソッドのmock化
+        const doRequet = require('../common/DoRequest');
+        const mockDoRequest = jest.spyOn(doRequet, 'doRequest');
+        beforeAll(async () => {
+            await AccessControlServer.start();
+            await BookManageServer.start();
+        });
+        afterAll(async () => {
+            await AccessControlServer.stop();
+            await BookManageServer.stop();
+            mockDoRequest.mockRestore();
+        });
+        beforeEach(async () => {
+            mockDoRequest.mockClear();
+        });
+        describe('正常系:', () => {
+            
+            test('正常: 蓄積データ種がひとつ', async () => {
+                // スタブサーバー起動
+                CatalogServer = new StubCatalogServer(true);
+                await CatalogServer.start();
+                IdServiceServer= new StubIdServiceServer(200, 200);
+                await IdServiceServer.start();
+
+                const response = await supertest(expressApp)
+                    .post(baseURI)
+                    .set('Cookie', ['operator_type2_session=application'])
+                    .set({
+                        'access-token': 'access-token',
+                        accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    })
+                    .send([{
+                        caller: {
+                            apiCode: 'a9cf3da0-5f6e-46c7-b913-0227482abebc',
+                            blockCode: 1000109,
+                            apiUrl: '/book-operate/event/{userId}',
+                            apiMethod: 'POST',
+                            userId: 'test_user_#7434',
+                            requestBody: [
+                                {
+                                    app: {
+                                        code: {
+                                            value: {
+                                                _value: 1000114
+                                            }
+                                        },
+                                        app: {
+                                            value: {
+                                                _value: 1000010,
+                                                _ver: 1
+                                            }
+                                        }
+                                    },
+                                    code: {
+                                        _value: 1000014,
+                                        _ver: 1
+                                    }
+                                }
+                            ],
+                            operator: {
+                                type: 2,
+                                loginId: 'app01',
+                                app: {
+                                    _value: 1000007,
+                                    _ver: 1
+                                }
+                            }
+                        },
+                        target: {
+                            blockCode: 1000109,
+                            apiUrl: '/book-operate/event/{userId}',
+                            apiMethod: 'POST'
+                        }
+                    }]);
+                expect(JSON.stringify(response.body)).toBe(JSON.stringify([{
+                    apiUrl: 'a',
+                    apiMethod: 'post',
+                    apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                    userId: 'a',
+                    expirationDate: response.body[0].expirationDate,
+                    blockCode: 1000109
+                }]));
+                expect(response.status).toBe(200);
+
+                // Book管理サービス.蓄積可否チェックAPI へのリクエストの確認
+                const bookManageApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3005/book-manage/settings/store/permission');
+                const bookManageRequest = JSON.parse(bookManageApiInfos[0][2] as string);
+                expect(bookManageRequest).toMatchObject({                                                                                                                                                                                                                                                                                           
+                    userId: 'test_user_#7434',
+                    wfCode: null,
+                    appCode: 1000007,
+                    actorCode: 1000114,
+                    datatype: [
+                        {
+                            _value: 1000014,
+                            _ver: 1
+                        }
+                    ]
+                });
+
+                // アクセス制御サービス.APIトークン生成API へのリクエストの確認
+                const accessControlApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3015/access-control');
+                const accessControlRequest = JSON.parse(accessControlApiInfos[0][2] as string);
+                // item.target.parameterの確認
+                expect(accessControlRequest[0].target.parameter).toBe(JSON.stringify([
+                    {
+                        _value: 1000009,
+                        _ver: 1
+                    },
+                    {
+                        _value: 1000014,
+                        _ver: 1
+                    },
+                    {
+                        _value: 1000500,
+                        _ver: 1
+                    }
+                ]));
+            });
+        });
+        describe('異常系:', () => {
+            test('異常: 蓄積可否チェック結果が蓄積不可', async () => {
+                // スタブサーバー起動
+                CatalogServer = new StubCatalogServer(true);
+                await CatalogServer.start();
+                IdServiceServer= new StubIdServiceServer(200, 200);
+                await IdServiceServer.start();
+
+                const response = await supertest(expressApp)
+                    .post(baseURI)
+                    .set('Cookie', ['operator_type2_session=application'])
+                    .set({
+                        'access-token': 'access-token',
+                        accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    })
+                    .send([{
+                        caller: {
+                            apiCode: 'a9cf3da0-5f6e-46c7-b913-0227482abebc',
+                            blockCode: 1000109,
+                            apiUrl: '/book-operate/event/{userId}',
+                            apiMethod: 'POST',
+                            userId: 'store_permission_fail_user',
+                            requestBody: [
+                                {
+                                    app: {
+                                        code: {
+                                            value: {
+                                                _value: 1000114
+                                            }
+                                        },
+                                        app: {
+                                            value: {
+                                                _value: 1000010,
+                                                _ver: 1
+                                            }
+                                        }
+                                    },
+                                    code: {
+                                        _value: 1000999,
+                                        _ver: 1
+                                    }
+                                }
+                            ],
+                            operator: {
+                                type: 2,
+                                loginId: 'app01',
+                                app: {
+                                    _value: 1000007,
+                                    _ver: 1
+                                }
+                            }
+                        },
+                        target: {
+                            blockCode: 1000109,
+                            apiUrl: '/book-operate/event/{userId}',
+                            apiMethod: 'POST'
+                        }
+                    }]);
+                expect(response.status).toBe(401);
+                expect(response.body.message).toBe(Message.IS_NOT_EXISTS_DATA_TYPE);
+
+                // Book管理サービス.蓄積可否チェックAPI へのリクエストの確認
+                const bookManageApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3005/book-manage/settings/store/permission');
+                const bookManageRequest = JSON.parse(bookManageApiInfos[0][2] as string);
+                expect(bookManageRequest).toMatchObject({                                                                                                                                                                                                                                                                                           
+                    userId: 'store_permission_fail_user',
+                    wfCode: null,
+                    appCode: 1000007,
+                    actorCode: 1000114,
+                    datatype: [
+                        {
+                            _value: 1000999,
+                            _ver: 1
+                        }
+                    ]
                 });
             });
         });
