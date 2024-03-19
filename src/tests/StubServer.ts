@@ -20,9 +20,12 @@ import Catalog1100010 = require('./catalog/1100010.json');
 import Catalog1200010 = require('./catalog/1200010.json');
 import Catalog1000040 = require('./catalog/1000040.json');
 import Catalog1000060 = require('./catalog/1000060.json');
+import Catalog1000061 = require('./catalog/1000061.json');
 import Catalog1000384 = require('./catalog/1000384.json');
 import Catalog1000385 = require('./catalog/1000385.json');
 import Catalog1000394 = require('./catalog/1000394.json');
+import Catalog1000129 = require('./catalog/1000129.json');
+import Catalog1001129 = require('./catalog/1001129.json');
 import Catalog1001384 = require('./catalog/1001384.json');
 import Catalog1000108 = require('./catalog/setting_actor_own_app_actor_1000020.json');
 import NamespaceActorSetting1000020 = require('./catalog/setting_actor_app_actor_1000020.json');
@@ -289,6 +292,12 @@ export class StubCatalogServer extends BaseStubServer {
                 res.status(200).json(Catalog1100010).end();
             } else if (code === 1200010) {
                 res.status(200).json(Catalog1200010).end();
+            } else if (code === 1000129) {
+                res.status(200).json(Catalog1000129).end();
+            } else if (code === 1001129) {
+                res.status(200).json(Catalog1001129).end();
+            } else if (code === 1000061) {
+                res.status(200).json(Catalog1000061).end();
             } else {
                 res.status(200).json(NON_BLOCK_NS_CATALOG).end();
             }
@@ -615,246 +624,127 @@ export class StubCatalogServer extends BaseStubServer {
 export class StubBookManageServer extends BaseStubServer {
     constructor(type?: number) {
         super();
-        this.app.get('/book-manage/settings/store/:id', (req, res) => {
-            const id = req.params.id;
-            if (id === 'id_user_') {
-                res.status(200).json({
-                    id: 1,
-                    bookId: 1,
-                    regionUseId: null,
-                    type: 'store',
-                    actor: {
-                        _value: 4444444,
-                        _ver: 1
-                    },
-                    app: null,
-                    wf: {
-                        _value: 1000007,
-                        _ver: 1
+        this.app.post('/book-manage/settings/store/permission', (req, res) => {
+            if (req.body.userId === 'store_permission_fail_user') {
+                res.status(200).json(
+                    {
+                        checkResult: false,
+                        dataType: null
                     }
-                }).end();
-            } else if (id === '_user_id') {
-                res.status(200).json({
-                    id: 1,
-                    bookId: 1,
-                    regionUseId: null,
-                    type: 'store',
-                    actor: {
-                        _value: 4444444,
-                        _ver: 1
-                    },
-                    app: null,
-                    wf: {
-                        _value: 1000007,
-                        _ver: 1
-                    },
-                    document: [
-                        {
-                            _value: 1000500,
-                            _ver: 1
-                        }
-                    ],
-                    event: [
-                        {
-                            _value: 10,
-                            _ver: 1
-                        }
-                    ],
-                    thing: [
-                        {
-                            _value: 10,
-                            _ver: 1
-                        }
-                    ]
-                }).end();
+                );
             } else {
-                res.status(200).json({
-                    id: 1,
-                    bookId: 1,
-                    regionUseId: null,
-                    type: 'store',
-                    actor: {
-                        _value: 4444444,
-                        _ver: 1
-                    },
-                    app: null,
-                    wf: {
-                        _value: 1000007,
-                        _ver: 1
-                    },
-                    document: [
-                        {
-                            _value: 1000500,
-                            _ver: 1
-                        }
-                    ],
-                    event: [
-                        {
-                            _value: 1000009,
-                            _ver: 1
-                        }
-                    ],
-                    thing: [
-                        {
-                            _value: 1000014,
-                            _ver: 1
-                        }
-                    ]
-                }).end();
+                res.status(200).json(
+                    {
+                        checkResult: true,
+                        dataType: [
+                            {
+                                _value: 1000009,
+                                _ver: 1
+                            },
+                            {
+                                _value: 1000014,
+                                _ver: 1
+                            },
+                            {
+                                _value: 1000500,
+                                _ver: 1
+                            }
+                        ]
+                    }
+                );
             }
         });
-        this.app.get('/book-manage/settings/share', (req, res) => {
-            if (type === 1) {
-                res.status(200).json([
+        this.app.post('/book-manage/setting/share/permission', (req, res) => {
+            if (req.body.userId === 'share_permission_fail_user') {
+                res.status(200).json(
                     {
-                        "id": 1,
-                        "actor": {
-                            "_value": 1000004
-                        },
-                        "app": {
-                            "_value": 1000007
-                        },
-                        "share": [
+                        checkResult: false,
+                        permission: null
+                    }
+                );
+            } else if (req.body.sourceActor) {
+                res.status(200).json(
+                    {
+                        checkResult: true,
+                        permission: [
                             {
-                                "code": {
-                                    "_value": 1000385,
-                                    "_ver": 1
-                                }
+                                sourceActorCode: 1000020,
+                                document: [
+                                    {
+                                        _value: 1000500,
+                                        _ver: 1
+                                    }
+                                ],
+                                event: [
+                                    {
+                                        _value: 1000009,
+                                        _ver: 1
+                                    }
+                                ],
+                                thing: [
+                                    {
+                                        _value: 1000014,
+                                        _ver: 1
+                                    }
+                                ]
                             }
                         ]
                     }
-                ]);
-            } else if (type === 2) {
-                res.status(200).json([
-                    {
-                        "id": 1,
-                        "actor": {
-                            "_value": 1000004
-                        },
-                        "app": {
-                            "_value": 1000007
-                        },
-                        "share": [
-                            {
-                                "code": {
-                                    "_value": 1000385,
-                                    "_ver": 1
-                                }
-                            }
-                        ]
-                    }
-                ]);
-            } else if (type === 3) {
-                res.status(200).json([
-                    {
-                        "id": 1,
-                        "actor": {
-                            "_value": 1000004
-                        },
-                        "app": {
-                            "_value": 1000007
-                        },
-                        "share": [
-                            {
-                                "code": {
-                                    "_value": 1000385,
-                                    "_ver": 1
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": 1,
-                        "actor": {
-                            "_value": 1000004
-                        },
-                        "app": {
-                            "_value": 1000007
-                        },
-                        "share": [
-                            {
-                                "code": {
-                                    "_value": 1000384,
-                                    "_ver": 1
-                                }
-                            }
-                        ]
-                    }
-                ]);
-            } else if (type === 99) {
-                res.status(200).json([
-                    {
-                        "id": 1,
-                        "actor": {
-                            "_value": 1000004
-                        },
-                        "app": {
-                            "_value": 1000007
-                        },
-                        "share": [
-                            {
-                                "code": {
-                                    "_value": 1000385,
-                                    "_ver": 10
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": 1,
-                        "actor": {
-                            "_value": 1000004
-                        },
-                        "app": {
-                            "_value": 1000007
-                        },
-                        "share": [
-                            {
-                                "code": {
-                                    "_value": 1000384,
-                                    "_ver": 10
-                                }
-                            }
-                        ]
-                    }
-                ]);
+                );
             } else {
-                res.status(200).json([
+                res.status(200).json(
                     {
-                        "id": 1,
-                        "actor": {
-                            "_value": 1000004
-                        },
-                        "app": {
-                            "_value": 1000007
-                        },
-                        "share": [
+                        checkResult: true,
+                        permission: [
                             {
-                                "code": {
-                                    "_value": 1000385,
-                                    "_ver": 1
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "id": 1,
-                        "actor": {
-                            "_value": 1000004
-                        },
-                        "app": {
-                            "_value": 1000007
-                        },
-                        "share": [
+                                sourceActorCode: 1000020,
+                                document: [
+                                    {
+                                        _value: 1000500,
+                                        _ver: 1
+                                    }
+                                ],
+                                event: [
+                                    {
+                                        _value: 1000009,
+                                        _ver: 1
+                                    }
+                                ],
+                                thing: [
+                                    {
+                                        _value: 1000014,
+                                        _ver: 1
+                                    }
+                                ]
+                            },
                             {
-                                "code": {
-                                    "_value": 1000384,
-                                    "_ver": 1
-                                }
+                                sourceActorCode: 1000061,
+                                document: [
+                                    {
+                                        _value: 1000500,
+                                        _ver: 1
+                                    }
+                                ],
+                                event: [
+                                    {
+                                        _value: 1000009,
+                                        _ver: 1
+                                    }
+                                ],
+                                thing: [
+                                    {
+                                        _value: 1000014,
+                                        _ver: 1
+                                    },
+                                    {
+                                        _value: 1000015,
+                                        _ver: 1
+                                    }
+                                ]
                             }
                         ]
                     }
-                ]);
+                );
             }
         });
         this.app.post('/book-manage/ind/settings/share/temp/collation', (req, res) => {
@@ -1090,101 +980,41 @@ export class StubBookManageServer extends BaseStubServer {
 export class StubBookManageServer1 extends BaseStubServer {
     constructor() {
         super();
-        this.app.get('/book-manage/settings/store/:id', (req, res) => {
-            const id = req.params.id;
-            if (id === 'id_user_') {
-                res.status(200).json({
-                    id: 1,
-                    bookId: 1,
-                    regionUseId: null,
-                    type: 'store',
-                    actor: {
-                        _value: 4444444,
-                        _ver: 1
-                    },
-                    app: null,
-                    wf: {
-                        _value: 1000007,
-                        _ver: 1
-                    }
-                }).end();
-            } else if (id === '_user_id') {
-                res.status(200).json({
-                    id: 1,
-                    bookId: 1,
-                    regionUseId: null,
-                    type: 'store',
-                    actor: {
-                        _value: 4444444,
-                        _ver: 1
-                    },
-                    app: null,
-                    wf: {
-                        _value: 1000007,
-                        _ver: 1
-                    },
-                    event: [
-                        {
-                            _value: 10,
-                            _ver: 1
-                        }
-                    ],
-                    thing: [
-                        {
-                            _value: 10,
-                            _ver: 1
-                        }
-                    ]
-                }).end();
-            } else {
-                res.status(200).json({
-                    id: 1,
-                    bookId: 1,
-                    regionUseId: null,
-                    type: 'store',
-                    actor: {
-                        _value: 4444444,
-                        _ver: 1
-                    },
-                    app: null,
-                    wf: {
-                        _value: 1000007,
-                        _ver: 1
-                    },
-                    event: [
+        this.app.post('/book-manage/settings/store/permission', (req, res) => {
+            res.status(200).json(
+                {
+                    checkResult: true,
+                    dataType: [
                         {
                             _value: 1000009,
                             _ver: 1
-                        }
-                    ],
-                    thing: [
+                        },
                         {
                             _value: 1000014,
                             _ver: 1
+                        },
+                        {
+                            _value: 1000500,
+                            _ver: 1
                         }
                     ]
-                }).end();
-            }
-        });
-        this.app.get('/book-manage/settings/share', (req, res) => {
-            res.status(200).json([
-                {
-                    "id": 2,
-                    "actor": {
-                        "_value": 1000004
-                    },
-                    "app": null,
-                    "wf": {
-                        "_value": 1000007
-                    },
-                    "share": [{
-                        "code": {
-                            "_value": 1000394,
-                            "_ver": 1
-                        }
-                    }]
                 }
-            ]);
+            );
+        });
+        this.app.post('/book-manage/setting/share/permission', (req, res) => {
+            res.status(200).json(
+                {
+                    checkResult: true,
+                    permission: [
+                        {
+                            sourceActorCode: 1000020,
+                            document: [],
+                            event: [],
+                            thing: []
+                        }
+                    ]
+                }
+            );
         });
         this.app.post('/book-manage/ind/settings/share/temp/collation', (req, res) => {
             if (req.body.tempShareCode === 'f9d540e6-8e39-423e-8eac-cd5063e37dcc') {
@@ -1287,101 +1117,41 @@ export class StubBookManageServer1 extends BaseStubServer {
 export class StubBookManageServer2 extends BaseStubServer {
     constructor() {
         super();
-        this.app.get('/book-manage/settings/store/:id', (req, res) => {
-            const id = req.params.id;
-            if (id === 'id_user_') {
-                res.status(200).json({
-                    id: 1,
-                    bookId: 1,
-                    regionUseId: null,
-                    type: 'store',
-                    actor: {
-                        _value: 4444444,
-                        _ver: 1
-                    },
-                    app: null,
-                    wf: {
-                        _value: 1000007,
-                        _ver: 1
-                    }
-                }).end();
-            } else if (id === '_user_id') {
-                res.status(200).json({
-                    id: 1,
-                    bookId: 1,
-                    regionUseId: null,
-                    type: 'store',
-                    actor: {
-                        _value: 4444444,
-                        _ver: 1
-                    },
-                    app: null,
-                    wf: {
-                        _value: 1000007,
-                        _ver: 1
-                    },
-                    event: [
-                        {
-                            _value: 10,
-                            _ver: 1
-                        }
-                    ],
-                    thing: [
-                        {
-                            _value: 10,
-                            _ver: 1
-                        }
-                    ]
-                }).end();
-            } else {
-                res.status(200).json({
-                    id: 1,
-                    bookId: 1,
-                    regionUseId: null,
-                    type: 'store',
-                    actor: {
-                        _value: 4444444,
-                        _ver: 1
-                    },
-                    app: null,
-                    wf: {
-                        _value: 1000007,
-                        _ver: 1
-                    },
-                    event: [
+        this.app.post('/book-manage/settings/store/permission', (req, res) => {
+            res.status(200).json(
+                {
+                    checkResult: true,
+                    dataType: [
                         {
                             _value: 1000009,
                             _ver: 1
-                        }
-                    ],
-                    thing: [
+                        },
                         {
                             _value: 1000014,
                             _ver: 1
+                        },
+                        {
+                            _value: 1000500,
+                            _ver: 1
                         }
                     ]
-                }).end();
-            }
-        });
-        this.app.get('/book-manage/settings/share', (req, res) => {
-            res.status(200).json([
-                {
-                    "id": 2,
-                    "actor": {
-                        "_value": 1000004
-                    },
-                    "app": null,
-                    "wf": {
-                        "_value": 1000007
-                    },
-                    "share": [{
-                        "code": {
-                            "_value": 1000394,
-                            "_ver": 1
-                        }
-                    }]
                 }
-            ]);
+            );
+        });
+        this.app.post('/book-manage/setting/share/permission', (req, res) => {
+            res.status(200).json(
+                {
+                    checkResult: true,
+                    permission: [
+                        {
+                            sourceActorCode: 1000020,
+                            document: [],
+                            event: [],
+                            thing: []
+                        }
+                    ]
+                }
+            );
         });
         this.app.post('/book-manage/ind/settings/share/temp/collation', (req, res) => {
             if (req.body.tempShareCode === 'f9d540e6-8e39-423e-8eac-cd5063e37dcc') {

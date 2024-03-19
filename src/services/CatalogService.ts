@@ -27,23 +27,6 @@ export default class CatalogService {
     static BLOCK_NAME_SPACE = /^catalog\/.*\/block\/(.*)$/;
 
     /**
-     * データ共有定義に関するカタログを取得する
-     * @param sharingCode
-     * @param operator
-     * @param includeDeleted 論理削除済データ取得フラグ
-     */
-    static async getSharingCatalog (sharingCode: number, sharingVersion: number, operator: OperatorDomain, includeDeleted = false) {
-        const result = await this.getCodeVersion(operator, sharingCode, sharingVersion, includeDeleted);
-        try {
-            const domain = await transformAndValidate(SharingCatalog, result.body) as SharingCatalog;
-            return domain;
-        } catch (err) {
-            const str = sprintf('カタログサービスにて取得したカタログを状態共有機能への変換に失敗しました(コード値: %s)', sharingCode);
-            throw new AppError(str, 500, err);
-        }
-    }
-
-    /**
      * 共有先制限定義に関するカタログを取得する
      * @param actorCode
      * @param app

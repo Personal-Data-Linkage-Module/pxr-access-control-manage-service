@@ -61,7 +61,8 @@ export default class AccessControlService {
                 apiUrl: item.target.apiUrl,
                 apiMethod: item.target.apiMethod,
                 blockCode: item.target.blockCode,
-                expirationDate: at
+                expirationDate: at,
+                parameter: item.target.parameter
             }
         }];
         let protocol: 'https' | 'http' = config.get('accessControlService.protocol');

@@ -67,6 +67,16 @@ export class RequestBody {
         actor: CodeObject;
 
     @IsOptional()
+    @Type(type => CodeObject)
+    @ValidateNested()
+        app: CodeObject;
+
+    @IsOptional()
+    @Type(type => CodeObject)
+    @ValidateNested()
+        wf: CodeObject;
+
+    @IsOptional()
     @Type(type => Destination)
     @ValidateNested()
         dest: Destination;
