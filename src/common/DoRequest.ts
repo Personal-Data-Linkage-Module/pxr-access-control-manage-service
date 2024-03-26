@@ -15,6 +15,8 @@ import path = require('path');
 /* eslint-enable */
 
 const Message = Config.ReadConfig('./config/message.json');
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
 
 /**
  * 汎用性特化型リクエスト関数
