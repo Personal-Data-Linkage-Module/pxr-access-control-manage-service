@@ -6,8 +6,8 @@ https://opensource.org/licenses/mit-license.php
 import supertest = require('supertest');
 import Application from '../index';
 import { EmptyResponseStubAccessControlServer, EmptyResponseStubBookManageServer, EmptyResponseStubCTokenLedgerServer } from './NonDataStubs';
-import { StubCatalogServer, StubAccessControlServer, StubOperatorServer, StubBookManageServer, StubCTokenLedgerServer, StubBookManageServer1, StubIdServiceServer } from './StubServer';
-import { WrongDataStubAccessControlServer, WrongDataStubBookManageServer, WrongDataStubCTokenLedgerServer } from './WrongDataStubs';
+import { StubCatalogServer, StubAccessControlServer, StubOperatorServer, StubBookManageServer, StubBookManageServer1, StubIdServiceServer } from './StubServer';
+import { WrongDataStubAccessControlServer, WrongDataStubBookManageServer, WrongDataStubCatalogServerNsSearch } from './WrongDataStubs';
 import Config from '../common/Config';
 import IdService from '../services/IdService_Stub';
 /* eslint-enable */
@@ -20,17 +20,13 @@ const AccessControlServer = new StubAccessControlServer();
 const OperatorServer = new StubOperatorServer();
 const BookManageServer = new StubBookManageServer();
 const BookManageServer1 = new StubBookManageServer1();
-const CTokenLedgerServer = new StubCTokenLedgerServer();
 // レスポンスが0件系
 const NonData_AccessControlServer = new EmptyResponseStubAccessControlServer();
 const NonData_BookManageServer_SearchAPI = new EmptyResponseStubBookManageServer('/book-manage/search/user');
-const NonData_BookManageServer_SettingSharingAPI = new EmptyResponseStubBookManageServer('/book-manage/settings/share');
 const NonData_CTokenLedgerServer = new EmptyResponseStubCTokenLedgerServer();
 // 異常なデータ型でのレスポンス
 const WrongData_AccessControlServer = new WrongDataStubAccessControlServer();
 const WrongData_BookManageServer_SearchAPI = new WrongDataStubBookManageServer('/book-manage/search/user');
-const WrongData_BookManageServer_SettingSharingAPI = new WrongDataStubBookManageServer('/book-manage/settings/share');
-const WrongData_CTokenLedgerServer = new WrongDataStubCTokenLedgerServer();
 
 // アプリケーション
 const expressApp = Application.express.app;
@@ -1159,12 +1155,10 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
         beforeAll(async () => {
             await AccessControlServer.start();
             await BookManageServer.start();
-            await CTokenLedgerServer.start();
         });
         afterAll(async () => {
             await AccessControlServer.stop();
             await BookManageServer.stop();
-            await CTokenLedgerServer.stop();
         });
         test('正常パターン 呼び出しオペレーターがアプリケーション, データ共有定義カタログが削除済み', async () => {
             CatalogServer = new StubCatalogServer();
@@ -1186,6 +1180,14 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                     userId: 'a',
                     expirationDate: response.body[0].expirationDate,
                     blockCode: 1000109
+                },
+                {
+                    apiUrl: 'a',
+                    apiMethod: 'post',
+                    apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                    userId: 'a',
+                    expirationDate: response.body[1].expirationDate,
+                    blockCode: 1001129
                 }
             ]));
             expect(response.status).toBe(200);
@@ -1209,6 +1211,14 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                     userId: 'a',
                     expirationDate: response.body[0].expirationDate,
                     blockCode: 1000109
+                },
+                {
+                    apiUrl: 'a',
+                    apiMethod: 'post',
+                    apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                    userId: 'a',
+                    expirationDate: response.body[1].expirationDate,
+                    blockCode: 1001129
                 }
             ]));
             expect(response.status).toBe(200);
@@ -1358,7 +1368,6 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
             expect(response.status).toBe(200);
         });
         test('正常パターン アプリケーション、destあり、アクセストークン検証：要', async () => {
-            // BookManageService.getUserInfoOnlyOneで配列型のレスポンスからpxrIdを取れないためエラーになる。
             CatalogServer = new StubCatalogServer(true);
             await CatalogServer.start();
             IdServiceServer = new StubIdServiceServer(200, 200);
@@ -1381,6 +1390,14 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                     userId: 'a',
                     expirationDate: response.body[0].expirationDate,
                     blockCode: 1000109
+                },
+                {
+                    apiUrl: 'a',
+                    apiMethod: 'post',
+                    apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                    userId: 'a',
+                    expirationDate: response.body[1].expirationDate,
+                    blockCode: 1001129
                 }
             ]));
             expect(response.status).toBe(200);
@@ -1409,6 +1426,14 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                     userId: 'a',
                     expirationDate: response.body[0].expirationDate,
                     blockCode: 1000109
+                },
+                {
+                    apiUrl: 'a',
+                    apiMethod: 'post',
+                    apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                    userId: 'a',
+                    expirationDate: response.body[1].expirationDate,
+                    blockCode: 1001129
                 }
             ]));
             expect(response.status).toBe(200);
@@ -1432,6 +1457,14 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                     userId: 'a',
                     expirationDate: response.body[0].expirationDate,
                     blockCode: 1000109
+                },
+                {
+                    apiUrl: 'a',
+                    apiMethod: 'post',
+                    apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                    userId: 'a',
+                    expirationDate: response.body[1].expirationDate,
+                    blockCode: 1001129
                 }
             ]));
             expect(response.status).toBe(200);
@@ -1442,30 +1475,10 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
         beforeAll(async () => {
             await AccessControlServer.start();
             await BookManageServer.start();
-            await CTokenLedgerServer.start();
         });
         afterAll(async () => {
             await AccessControlServer.stop();
             await BookManageServer.stop();
-            await CTokenLedgerServer.stop();
-        });
-        test('異常パターン 許可されていないデータ種の共有許可リクエスト', async () => {
-            CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                .post(baseURI)
-                .set({
-                    accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                })
-                .send(notAllowedDataSharingRequest);
-
-            expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                status: 400,
-                message: 'いずれの状態共有機能定義においても、リクエストされたデータ種を共有できるように許可されていません'
-            }));
-            expect(response.status).toBe(400);
         });
         test('異常パターン 連携先としてリクエスト.利用者IDが設定されたPXRユーザーが存在しない', async () => {
             CatalogServer = new StubCatalogServer();
@@ -1483,82 +1496,6 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
             expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 400, message: 'Book管理サービス.My-Condition-Book一覧が0件でした' }));
             expect(response.status).toBe(400);
         });
-        test('異常パターン 共有先制限 許可されていないRegion', async () => {
-            wfSuccessfullyData5[0].caller.requestBody.actor._value = 1000130;
-            CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                .post(baseURI)
-                .set({
-                    accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                })
-                .send(wfSuccessfullyData5);
-
-            expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                status: 400,
-                message: '共有先制限定義により、リクエストされたデータ種を共有できるように許可されていません'
-            }));
-            expect(response.status).toBe(400);
-        });
-        test('異常パターン 共有先制限 許可されていないサービス', async () => {
-            wfSuccessfullyData6[0].caller.requestBody.actor._value = 1000131;
-            CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                .post(baseURI)
-                .set({
-                    accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                })
-                .send(wfSuccessfullyData6);
-
-            expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                status: 400,
-                message: '共有先制限定義により、リクエストされたデータ種を共有できるように許可されていません'
-            }));
-            expect(response.status).toBe(400);
-        });
-        test('異常パターン 共有先制限 禁止されているRegion', async () => {
-            wfSuccessfullyData5[0].caller.requestBody.actor._value = 1000132;
-            CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                .post(baseURI)
-                .set({
-                    accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                })
-                .send(wfSuccessfullyData5);
-
-            expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                status: 400,
-                message: '共有先制限定義により、リクエストされたデータ種を共有できるように許可されていません'
-            }));
-            expect(response.status).toBe(400);
-        });
-        test('異常パターン 共有先制限 禁止されているサービス', async () => {
-            wfSuccessfullyData6[0].caller.requestBody.actor._value = 1000133;
-            CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                .post(baseURI)
-                .set({
-                    accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                })
-                .send(wfSuccessfullyData6);
-
-            expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                status: 400,
-                message: '共有先制限定義により、リクエストされたデータ種を共有できるように許可されていません'
-            }));
-            expect(response.status).toBe(400);
-        });
     });
 
     describe('継続的データ共有APIトークン生成指示 連携サービスからのレスポンスが空 POST: ' + baseURI, () => {
@@ -1566,12 +1503,10 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
             beforeAll(async () => {
                 await NonData_AccessControlServer.start()
                 await BookManageServer.start();
-                await CTokenLedgerServer.start();
             });
             afterAll(async () => {
                 await NonData_AccessControlServer.stop();
                 await BookManageServer.stop();
-                await CTokenLedgerServer.stop();
             });
             test('アクセス制御サービスからのレスポンスが空', async () => {
                 CatalogServer = new StubCatalogServer();
@@ -1591,11 +1526,9 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
         describe('Book管理サービス', () => {
             beforeAll(async () => {
                 await AccessControlServer.start();
-                await CTokenLedgerServer.start();
             });
             afterAll(async () => {
                 await AccessControlServer.stop();
-                await CTokenLedgerServer.stop();
             });
             describe('Book一覧検索API', () => {
                 beforeAll(async () => {
@@ -1620,62 +1553,6 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                     expect(response.status).toBe(400);
                 });
             });
-            describe('共有定義取得API', () => {
-                beforeAll(async () => {
-                    await NonData_BookManageServer_SettingSharingAPI.start();
-                });
-                afterAll(async () => {
-                    await NonData_BookManageServer_SettingSharingAPI.stop();
-                });
-                test('レスポンスが空', async () => {
-                    CatalogServer = new StubCatalogServer();
-                    await CatalogServer.start();
-                    const response = await supertest(expressApp)
-                        .post(baseURI)
-                        .set({
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                        })
-                        .send(wfSuccessfullyData);
-        
-                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 400, message: 'Book管理サービス.データ共有定義取得が0件でした' }));
-                    expect(response.status).toBe(400);
-                });
-            });
-        });
-        describe('C Token台帳サービス', () => {
-            beforeAll(async () => {
-                await AccessControlServer.start();
-                await BookManageServer.start();
-            });
-            afterAll(async () => {
-                await AccessControlServer.stop();
-                await BookManageServer.stop();
-            });
-            describe('件数取得API', () => {
-                beforeAll(async () => {
-                    await NonData_CTokenLedgerServer.start();
-                });
-                afterAll(async () => {
-                    await NonData_CTokenLedgerServer.stop();
-                });
-                test('レスポンスが空', async () => {
-                    CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                        .post(baseURI)
-                        .set({
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                        })
-                        .send(wfSuccessfullyData);
-        
-                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 400, message: 'CToken台帳サービス.件数検索APIの結果が0件でした' }));
-                    expect(response.status).toBe(400);
-                });
-            });
         });
     });
 
@@ -1684,12 +1561,10 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
             beforeAll(async () => {
                 await WrongData_AccessControlServer.start();
                 await BookManageServer.start();
-                await CTokenLedgerServer.start();
             });
             afterAll(async () => {
                 await WrongData_AccessControlServer.stop();
                 await BookManageServer.stop();
-                await CTokenLedgerServer.stop();
             });
             test('アクセス制御サービスからのレスポンスに不足', async () => {
                 CatalogServer = new StubCatalogServer();
@@ -1713,11 +1588,9 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
         describe('Book管理サービス', () => {
             beforeAll(async () => {
                 await AccessControlServer.start();
-                await CTokenLedgerServer.start();
             });
             afterAll(async () => {
                 await AccessControlServer.stop();
-                await CTokenLedgerServer.stop();
             });
             describe('Book一覧検索API', () => {
                 beforeAll(async () => {
@@ -1745,201 +1618,6 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                     expect(response.status).toBe(500);
                 });
             });
-            describe('共有定義取得API', () => {
-                beforeAll(async () => {
-                    await WrongData_BookManageServer_SettingSharingAPI.start();
-                });
-                afterAll(async () => {
-                    await WrongData_BookManageServer_SettingSharingAPI.stop();
-                });
-                test('レスポンスに不足', async () => {
-                    CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                        .post(baseURI)
-                        .set({
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                        })
-                        .send(wfSuccessfullyData);
-        
-                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 500, message: 'Book管理サービス.データ共有定義取得の結果を内部処理用に変換することに失敗しました' }));
-                    expect(response.status).toBe(500);
-                });
-            });
-        });
-        describe('C Token台帳サービス', () => {
-            beforeAll(async () => {
-                await AccessControlServer.start();
-                await BookManageServer.start();
-            });
-            afterAll(async () => {
-                await AccessControlServer.stop();
-                await BookManageServer.stop();
-            });
-            describe('件数取得API', () => {
-                beforeAll(async () => {
-                    await WrongData_CTokenLedgerServer.start();
-                });
-                afterAll(async () => {
-                    await WrongData_CTokenLedgerServer.stop();
-                });
-                test('レスポンスに不足', async () => {
-                    CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                        .post(baseURI)
-                        .set({
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                        })
-                        .send(wfSuccessfullyData);
-        
-                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 500, message: 'CToken台帳サービス.件数検索APIの結果を内部処理用の変換に失敗しました' }));
-                    expect(response.status).toBe(500);
-                });
-            });
-        });
-        describe('カタログサービス', () => {
-            beforeAll(async () => {
-                await AccessControlServer.start();
-                await BookManageServer1.start();
-                await CTokenLedgerServer.start();
-            });
-            afterAll(async () => {
-                await AccessControlServer.stop();
-                await BookManageServer1.stop();
-                await CTokenLedgerServer.stop();
-            });
-            describe('カタログ取得API', () => {
-                test('状態共有機能カタログ取得のレスポンスに不足', async () => {
-                    CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                        .post(baseURI)
-                        .set({
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                        })
-                        .send(wfSuccessfullyData);
-        
-                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                        status: 500,
-                        message: 'カタログサービスにて取得したカタログを状態共有機能への変換に失敗しました(コード値: 1000394)'
-                    }));
-                    expect(response.status).toBe(500);
-                });
-            });
-        });
-        describe('カタログサービス2', () => {
-            beforeAll(async () => {
-                await AccessControlServer.start();
-                await BookManageServer.start();
-                await CTokenLedgerServer.start();
-            });
-            afterAll(async () => {
-                await AccessControlServer.stop();
-                await BookManageServer.stop();
-                await CTokenLedgerServer.stop();
-            });
-            describe('カタログ取得API', () => {
-                test('共有先制限定義カタログ取得のレスポンスに不足', async () => {
-                    CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                        .post(baseURI)
-                        .set({
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                        })
-                        .send(wfSuccessfullyData8);
-        
-                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                        status: 500,
-                        message: 'カタログサービスにて取得したカタログを共有先制限定義への変換に失敗しました(ネームスペース: catalog/ext/test-org/actor/app/actor_1000125/sharing-restriction)'
-                    }));
-                    expect(response.status).toBe(500);
-                });
-            });
-        });
-        describe('データ共有サービス', () => {
-            beforeAll(async () => {
-                await AccessControlServer.start();
-                await BookManageServer.start();
-                await CTokenLedgerServer.start();
-            });
-            afterAll(async () => {
-                await AccessControlServer.stop();
-                await BookManageServer.stop();
-                await CTokenLedgerServer.stop();
-            });
-            describe('共有先制限チェックAPI', () => {
-                test('共有先制限定義 許可リストと禁止リストが両方設定されている(document)', async () => {
-                    wfSuccessfullyData8[0].caller.requestBody.actor._value = 1000126;
-                    CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                        .post(baseURI)
-                        .set({
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                        })
-                        .send(wfSuccessfullyData8);
-        
-                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                        status: 400,
-                        message: '共有先制限定義の許可リストと禁止リストが同時に定義されています'
-                    }));
-                    expect(response.status).toBe(400);
-                });
-            });
-            describe('共有先制限チェックAPI', () => {
-                test('共有先制限定義 許可リストと禁止リストが両方設定されている(event)', async () => {
-                    wfSuccessfullyData8[0].caller.requestBody.actor._value = 1000127;
-                    CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                        .post(baseURI)
-                        .set({
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                        })
-                        .send(wfSuccessfullyData8);
-        
-                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                        status: 400,
-                        message: '共有先制限定義の許可リストと禁止リストが同時に定義されています'
-                    }));
-                    expect(response.status).toBe(400);
-                });
-            });
-            describe('共有先制限チェックAPI', () => {
-                test('共有先制限定義 許可リストと禁止リストが両方設定されている(thing)', async () => {
-                    wfSuccessfullyData8[0].caller.requestBody.actor._value = 1000128;
-                    CatalogServer = new StubCatalogServer();
-            await CatalogServer.start();
-            const response = await supertest(expressApp)
-                        .post(baseURI)
-                        .set({
-                            accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A10002%2C%22_ver%22%3A1%7D%7D'
-                        })
-                        .send(wfSuccessfullyData8);
-        
-                    expect(JSON.stringify(response.body)).toBe(JSON.stringify({
-                        status: 400,
-                        message: '共有先制限定義の許可リストと禁止リストが同時に定義されています'
-                    }));
-                    expect(response.status).toBe(400);
-                });
-            });
         });
     });
 
@@ -1952,14 +1630,11 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
             const mockDoRequest = jest.spyOn(doRequet, 'doRequest');
             beforeAll(async () => {
                 await AccessControlServer.start();
-                await CTokenLedgerServer.start();
                 await BookManageServer.start();
             });
             afterAll(async () => {
                 await AccessControlServer.stop();
-                await CTokenLedgerServer.stop();
-                await BookManageServer.stop();
-                mockDoRequest.mockRestore();
+                await BookManageServer.stop()
             });
             beforeEach(async () => {
                 mockDoRequest.mockClear();
@@ -1988,6 +1663,14 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                         userId: 'a',
                         expirationDate: response.body[0].expirationDate,
                         blockCode: 1000109
+                    },
+                    {
+                        apiUrl: 'a',
+                        apiMethod: 'post',
+                        apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                        userId: 'a',
+                        expirationDate: response.body[1].expirationDate,
+                        blockCode: 1001129
                     }
                 ]));
 
@@ -2025,6 +1708,14 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                         userId: 'a',
                         expirationDate: response.body[0].expirationDate,
                         blockCode: 1000109
+                    },
+                    {
+                        apiUrl: 'a',
+                        apiMethod: 'post',
+                        apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                        userId: 'a',
+                        expirationDate: response.body[1].expirationDate,
+                        blockCode: 1001129
                     }
                 ]));
                 expect(response.status).toBe(200);
@@ -2063,6 +1754,14 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
                         userId: 'a',
                         expirationDate: response.body[0].expirationDate,
                         blockCode: 1000109
+                    },
+                    {
+                        apiUrl: 'a',
+                        apiMethod: 'post',
+                        apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                        userId: 'a',
+                        expirationDate: response.body[1].expirationDate,
+                        blockCode: 1001129
                     }
                 ]));
                 expect(response.status).toBe(200);
@@ -2112,12 +1811,10 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
             describe('Book管理サービス.ユーザー取得APIの結果が 0件 ', () => {
                 beforeAll(async () => {
                     await AccessControlServer.start();
-                    await CTokenLedgerServer.start();
                     await NonData_BookManageServer_SearchAPI.start();
                 });
                 afterAll(async () => {
                     await AccessControlServer.stop();
-                    await CTokenLedgerServer.stop();
                     await NonData_BookManageServer_SearchAPI.stop();
                 });
                 test('異常: Book管理サービス.ユーザー取得APIの結果が 0件 オペレーター: アプリケーション', async () => {
@@ -2138,6 +1835,530 @@ describe('Access-Control Manage Service.Create the sharing continuous API key', 
     
                     expect(JSON.stringify(response.body)).toBe(JSON.stringify({ status: 400, message: 'Book管理サービス.My-Condition-Book一覧が0件でした' }));
                     expect(response.status).toBe(400);
+                });
+            });
+        });
+    });
+    describe('SNS通知バグ対応追加ケース 継続的データ共有APIトークン生成指示 POST:', () => {
+        //DoRequestメソッドのmock化
+        const doRequest = require('../common/DoRequest');
+        const mockDoRequest = jest.spyOn(doRequest, 'doRequest');
+        beforeAll(async () => {
+            await AccessControlServer.start();
+            await BookManageServer.start();
+        });
+        afterAll(async () => {
+            await AccessControlServer.stop();
+            await BookManageServer.stop();
+            mockDoRequest.mockRestore();
+        });
+        beforeEach(async () => {
+            mockDoRequest.mockClear();
+        });
+        describe('正常系:', () => {
+            test('正常: 共有のリクエストのデータ種がひとつ（共有元が複数）', async () => {
+                CatalogServer = new StubCatalogServer(true);
+                await CatalogServer.start();
+                IdServiceServer= new StubIdServiceServer(200, 200);
+                await IdServiceServer.start();
+                const response = await supertest(expressApp)
+                    .post(baseURI)
+                    .set({
+                        'access-token': 'access-token',
+                        accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A1000114%2C%22_ver%22%3A1%7D%7D'
+                    })
+                    .send([{
+                        caller: {
+                            apiCode: '31b6f6ca-c855-435c-a596-77a0aa4ee30d',
+                            blockCode: 1000109,
+                            apiUrl: '/book-operate/share',
+                            apiMethod: 'POST',
+                            operator: {
+                                type: 2,
+                                app: {
+                                    _value: 1000007,
+                                    _ver: 1
+                                },
+                                loginId: 'app_member01'
+                            },
+                            requestBody: {
+                                userId: 'test_user_#7434',
+                                document: null,
+                                event: [
+                                    {
+                                        _value: 1000009,
+                                        _ver: 1
+                                    }
+                                ],
+                                thing: null
+                            }
+                        },
+                        target: {
+                            apiUrl: '/book-operate/share/search',
+                            apiMethod: 'POST'
+                        }
+                    }]);
+
+                expect(JSON.stringify(response.body)).toBe(JSON.stringify([
+                    {
+                        apiUrl: 'a',
+                        apiMethod: 'post',
+                        apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                        userId: 'a',
+                        expirationDate: response.body[0].expirationDate,
+                        blockCode: 1000109
+                    },
+                    {
+                        apiUrl: 'a',
+                        apiMethod: 'post',
+                        apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                        userId: 'a',
+                        expirationDate: response.body[1].expirationDate,
+                        blockCode: 1001129
+                    }
+                ]));
+                expect(response.status).toBe(200);
+
+                // Book管理サービス.共有可否チェックAPI へのリクエストの確認
+                const bookManageApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3005/book-manage/setting/share/permission');
+                const bookManageRequest = JSON.parse(bookManageApiInfos[0][2] as string);
+                expect(bookManageRequest).toMatchObject({                                                                                                                                                                                                                                                                                           
+                    userId: 'test_user_#7434',
+                    appCode: 1000007,
+                    actorCode: 1000114,
+                    document: null,
+                    event: [
+                        {
+                            _value: 1000009,
+                            _ver: 1
+                        }
+                    ],
+                    thing: null,
+                    sourceActor: null,
+                    sourceAsset: null
+                });
+
+                // アクセス制御サービス.APIトークン生成API へのリクエストの確認
+                const accessControlApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3015/access-control');
+                // item.target.parameterの確認
+                const accessControlRequest1 = JSON.parse(accessControlApiInfos[0][2] as string);
+                expect(accessControlRequest1[0].target.parameter).toBe(JSON.stringify(
+                    {
+                        document: [
+                            {
+                                _value: 1000500,
+                                _ver: 1
+                            }
+                        ],
+                        event: [
+                            {
+                                _value: 1000009,
+                                _ver: 1
+                            }
+                        ],
+                        thing: [
+                            {
+                                _value: 1000014,
+                                _ver: 1
+                            }
+                        ]
+                    }
+                ));
+                const accessControlRequest2 = JSON.parse(accessControlApiInfos[1][2] as string);
+                // item.target.parameterの確認
+                expect(accessControlRequest2[0].target.parameter).toBe(JSON.stringify(
+                    {
+                        document: [
+                            {
+                                _value: 1000500,
+                                _ver: 1
+                            }
+                        ],
+                        event: [
+                            {
+                                _value: 1000009,
+                                _ver: 1
+                            }
+                        ],
+                        thing: [
+                            {
+                                _value: 1000014,
+                                _ver: 1
+                            },
+                            {
+                                _value: 1000015,
+                                _ver: 1
+                            }
+                        ]
+                    }
+                ));
+            });
+            test('正常: 共有のリクエストのデータ種が複数（共有元が複数）', async () => {
+                CatalogServer = new StubCatalogServer(true);
+                await CatalogServer.start();
+                IdServiceServer= new StubIdServiceServer(200, 200);
+                await IdServiceServer.start();
+                const response = await supertest(expressApp)
+                    .post(baseURI)
+                    .set({
+                        'access-token': 'access-token',
+                        accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A1000114%2C%22_ver%22%3A1%7D%7D'
+                    })
+                    .send([{
+                        caller: {
+                            apiCode: '31b6f6ca-c855-435c-a596-77a0aa4ee30d',
+                            blockCode: 1000109,
+                            apiUrl: '/book-operate/share',
+                            apiMethod: 'POST',
+                            operator: {
+                                type: 2,
+                                app: {
+                                    _value: 1000007,
+                                    _ver: 1
+                                },
+                                loginId: 'app_member01'
+                            },
+                            requestBody: {
+                                userId: 'test_user_#7434',
+                                document: [
+                                    {
+                                        _value: 1000500,
+                                        _ver: 1
+                                    }
+                                ],
+                                event: [
+                                    {
+                                        _value: 1000009,
+                                        _ver: 1
+                                    }
+                                ],
+                                thing: [
+                                    {
+                                        _value: 1000014,
+                                        _ver: 1
+                                    }
+                                ]
+                            }
+                        },
+                        target: {
+                            apiUrl: '/book-operate/share/search',
+                            apiMethod: 'POST'
+                        }
+                    }]);
+
+                expect(JSON.stringify(response.body)).toBe(JSON.stringify([
+                    {
+                        apiUrl: 'a',
+                        apiMethod: 'post',
+                        apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                        userId: 'a',
+                        expirationDate: response.body[0].expirationDate,
+                        blockCode: 1000109
+                    },
+                    {
+                        apiUrl: 'a',
+                        apiMethod: 'post',
+                        apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                        userId: 'a',
+                        expirationDate: response.body[1].expirationDate,
+                        blockCode: 1001129
+                    }
+                ]));
+                expect(response.status).toBe(200);
+
+                // Book管理サービス.共有可否チェックAPI へのリクエストの確認
+                const bookManageApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3005/book-manage/setting/share/permission');
+                const bookManageRequest = JSON.parse(bookManageApiInfos[0][2] as string);
+                expect(bookManageRequest).toMatchObject({                                                                                                                                                                                                                                                                                           
+                    userId: 'test_user_#7434',
+                    appCode: 1000007,
+                    actorCode: 1000114,
+                    document: [
+                        {
+                            _value: 1000500,
+                            _ver: 1
+                        }
+                    ],
+                    event: [
+                        {
+                            _value: 1000009,
+                            _ver: 1
+                        }
+                    ],
+                    thing: [
+                        {
+                            _value: 1000014,
+                            _ver: 1
+                        }
+                    ],
+                    sourceActor: null,
+                    sourceAsset: null
+                });
+
+                // アクセス制御サービス.APIトークン生成API へのリクエストの確認
+                const accessControlApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3015/access-control');
+                
+                const accessControlRequest1 = JSON.parse(accessControlApiInfos[0][2] as string);
+                expect(accessControlRequest1[0].target.parameter).toBe(JSON.stringify(
+                    {
+                        document: [
+                            {
+                                _value: 1000500,
+                                _ver: 1
+                            }
+                        ],
+                        event: [
+                            {
+                                _value: 1000009,
+                                _ver: 1
+                            }
+                        ],
+                        thing: [
+                            {
+                                _value: 1000014,
+                                _ver: 1
+                            }
+                        ]
+                    }
+                ));
+                const accessControlRequest2 = JSON.parse(accessControlApiInfos[1][2] as string);
+                // item.target.parameterの確認
+                expect(accessControlRequest2[0].target.parameter).toBe(JSON.stringify(
+                    {
+                        document: [
+                            {
+                                _value: 1000500,
+                                _ver: 1
+                            }
+                        ],
+                        event: [
+                            {
+                                _value: 1000009,
+                                _ver: 1
+                            }
+                        ],
+                        thing: [
+                            {
+                                _value: 1000014,
+                                _ver: 1
+                            },
+                            {
+                                _value: 1000015,
+                                _ver: 1
+                            }
+                        ]
+                    }
+                ));
+            });
+            test('正常: 共有のリクエストに共有元指定がある（共有元がひとつ）', async () => {
+                CatalogServer = new StubCatalogServer(true);
+                await CatalogServer.start();
+                IdServiceServer= new StubIdServiceServer(200, 200);
+                await IdServiceServer.start();
+                const response = await supertest(expressApp)
+                    .post(baseURI)
+                    .set({
+                        'access-token': 'access-token',
+                        accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A1000114%2C%22_ver%22%3A1%7D%7D'
+                    })
+                    .send([{
+                        caller: {
+                            apiCode: '31b6f6ca-c855-435c-a596-77a0aa4ee30d',
+                            blockCode: 1000109,
+                            apiUrl: '/book-operate/share',
+                            apiMethod: 'POST',
+                            operator: {
+                                type: 2,
+                                app: {
+                                    _value: 1000007,
+                                    _ver: 1
+                                },
+                                role: [
+                                    {
+                                        _value: 1000005,
+                                        _ver: 1
+                                    }
+                                ],
+                                loginId: 'app_member01'
+                            },
+                            requestBody: {
+                                userId: 'test_user_#7434',
+                                document: [
+                                    {
+                                        _value: 1000500,
+                                        _ver: 1
+                                    }
+                                ],
+                                event: [
+                                    {
+                                        _value: 1000009,
+                                        _ver: 1
+                                    }
+                                ],
+                                thing: [
+                                    {
+                                        _value: 1000014,
+                                        _ver: 1
+                                    }
+                                ],
+                                actor: {
+                                    _value: 1000020,
+                                    _ver: 1
+                                },
+                                app: {
+                                    _value: 1000008,
+                                    _ver: 1
+                                },
+                                wf: null
+                            }
+                        },
+                        target: {
+                            apiUrl: '/book-operate/share/search',
+                            apiMethod: 'POST'
+                        }
+                    }]);
+
+                expect(JSON.stringify(response.body)).toBe(JSON.stringify([
+                    {
+                        apiUrl: 'a',
+                        apiMethod: 'post',
+                        apiToken: 'fbe8cc4f80b390ea06b289c676bacc40347a9a812a5fd62588f035372f5dddd2',
+                        userId: 'a',
+                        expirationDate: response.body[0].expirationDate,
+                        blockCode: 1000109
+                    }
+                ]));
+                expect(response.status).toBe(200);
+
+                // Book管理サービス.共有可否チェックAPI へのリクエストの確認
+                const bookManageApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3005/book-manage/setting/share/permission');
+                const bookManageRequest = JSON.parse(bookManageApiInfos[0][2] as string);
+                expect(bookManageRequest).toMatchObject({                                                                                                                                                                                                                                                                                           
+                    userId: 'test_user_#7434',
+                    appCode: 1000007,
+                    actorCode: 1000114,
+                    document: [
+                        {
+                            _value: 1000500,
+                            _ver: 1
+                        }
+                    ],
+                    event: [
+                        {
+                            _value: 1000009,
+                            _ver: 1
+                        }
+                    ],
+                    thing: [
+                        {
+                            _value: 1000014,
+                            _ver: 1
+                        }
+                    ],
+                    sourceActor: 1000020,
+                    sourceAsset: 1000008
+                });
+
+                // アクセス制御サービス.APIトークン生成API へのリクエストの確認
+                const accessControlApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3015/access-control');
+                
+                const accessControlRequest1 = JSON.parse(accessControlApiInfos[0][2] as string);
+                expect(accessControlRequest1[0].target.parameter).toBe(JSON.stringify(
+                    {
+                        document: [
+                            {
+                                _value: 1000500,
+                                _ver: 1
+                            }
+                        ],
+                        event: [
+                            {
+                                _value: 1000009,
+                                _ver: 1
+                            }
+                        ],
+                        thing: [
+                            {
+                                _value: 1000014,
+                                _ver: 1
+                            }
+                        ]
+                    }
+                ));
+            });
+        });
+        describe('異常系:', () => {
+            test('異常: Book管理サービス.共有可否チェックAPIの結果が共有不可', async () => {
+                CatalogServer = new StubCatalogServer(true);
+                await CatalogServer.start();
+                IdServiceServer= new StubIdServiceServer(200, 200);
+                await IdServiceServer.start();
+                const response = await supertest(expressApp)
+                    .post(baseURI)
+                    .set({
+                        'access-token': 'access-token',
+                        accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        session: '%7B%22sessionId%22%3A%222212d4a969f24f5e341470c546006d6552d1aa3c0cf60abc3002c5b29143c1ca%22%2C%22operatorId%22%3A1%2C%22type%22%3A3%2C%22loginId%22%3A%22root_member01%22%2C%22name%22%3A%22%E9%81%8B%E5%96%B6%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC01%22%2C%22mobilePhone%22%3A%2209011112222%22%2C%22auth%22%3A%7B%22add%22%3Atrue%2C%22update%22%3Atrue%2C%22delete%22%3Atrue%7D%2C%22lastLoginAt%22%3A%222019-10-1814%3A07%3A43%22%2C%22passwordChangedFlg%22%3Afalse%2C%22attributes%22%3A%7B%7D%2C%22roles%22%3A%5B%7B%22_value%22%3A1%2C%22_ver%22%3A1%7D%5D%2C%22block%22%3A%7B%22_value%22%3A10001%2C%22_ver%22%3A1%7D%2C%22actor%22%3A%7B%22_value%22%3A1000114%2C%22_ver%22%3A1%7D%7D'
+                    })
+                    .send([{
+                        caller: {
+                            apiCode: '31b6f6ca-c855-435c-a596-77a0aa4ee30d',
+                            blockCode: 1000109,
+                            apiUrl: '/book-operate/share',
+                            apiMethod: 'POST',
+                            operator: {
+                                type: 2,
+                                app: {
+                                    _value: 1000007,
+                                    _ver: 1
+                                },
+                                loginId: 'app_member01'
+                            },
+                            requestBody: {
+                                userId: 'share_permission_fail_user',
+                                document: null,
+                                event: [
+                                    {
+                                        _value: 1000009,
+                                        _ver: 1
+                                    }
+                                ],
+                                thing: null
+                            }
+                        },
+                        target: {
+                            apiUrl: '/book-operate/share/search',
+                            apiMethod: 'POST'
+                        }
+                    }]);
+
+                expect(response.status).toBe(401);
+                expect(response.body.message).toBe('リクエストされたデータ種を共有できるように許可されていません');
+
+                // Book管理サービス.共有可否チェックAPI へのリクエストの確認
+                const bookManageApiInfos = mockDoRequest.mock.calls.filter(elem => elem[1] === 'http://localhost:3005/book-manage/setting/share/permission');
+                const bookManageRequest = JSON.parse(bookManageApiInfos[0][2] as string);
+                expect(bookManageRequest).toMatchObject({                                                                                                                                                                                                                                                                                           
+                    userId: 'share_permission_fail_user',
+                    appCode: 1000007,
+                    actorCode: 1000114,
+                    document: null,
+                    event: [
+                        {
+                            _value: 1000009,
+                            _ver: 1
+                        }
+                    ],
+                    thing: null,
+                    sourceActor: null,
+                    sourceAsset: null
                 });
             });
         });
