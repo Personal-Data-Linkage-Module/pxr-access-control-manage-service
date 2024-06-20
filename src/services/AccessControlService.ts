@@ -31,7 +31,8 @@ export default class AccessControlService {
         toDomain: BlockCatalogDomain,
         fromDomain: BlockCatalogDomain,
         item: CreateAPIKeyReqDto,
-        operator: OperatorDomain
+        operator: OperatorDomain,
+        expirationDate :string = null
     ) {
         // 個人であればstatusを確認する
         if (operator.type === OperatorDomain.TYPE_PERSONAL_NUMBER) {
@@ -39,7 +40,7 @@ export default class AccessControlService {
         }
 
         // リクエストデータを生成する
-        const at = moment(new Date())
+        const at = expirationDate || moment(new Date())
             .add(parseInt(config.get('standardTime')), 'hours')
             .add(parseInt(config.get('defaultExpire.addMinutes')), 'minutes')
             .format(DateTimeFormatString);

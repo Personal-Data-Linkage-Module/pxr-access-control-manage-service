@@ -19,6 +19,9 @@ import CTokenLedgerService from '../services/CTokenLedgerService';
 import CatalogService from '../services/CatalogService';
 import SharingDataService from '../services/SharingDataService';
 import { applicationLogger } from '../common/logging';
+import moment = require('moment');
+import config = require('config');
+import { DateTimeFormatString } from '../common/Transform';
 /* eslint-enable */
 
 @JsonController('/access-control-manage')
@@ -85,6 +88,12 @@ export default class {
             // アクターコード配列をブロックコード配列にする
             const blockCodes = await CatalogService.getBlockCodesWithActorCodes(actorCodes, operator);
 
+            // APIキーに設定する有効期限の取得
+            const expirationDate = moment(new Date())
+                .add(parseInt(config.get('standardTime')), 'hours')
+                .add(parseInt(config.get('defaultExpire.addMinutes')), 'minutes')
+                .format(DateTimeFormatString);
+
             // ブロックコード分、APIキーを発行する
             for (const blockCode of blockCodes) {
                 // ドメインを取得する
@@ -98,7 +107,8 @@ export default class {
                     domains.toCatalog,
                     domains.fromCatalog,
                     item,
-                    operator
+                    operator,
+                    expirationDate
                 );
                 // 結果が空であれば、次の処理へ
                 if (!tokenList.length) {

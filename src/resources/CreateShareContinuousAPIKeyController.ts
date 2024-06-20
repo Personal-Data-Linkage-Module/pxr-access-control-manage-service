@@ -19,6 +19,9 @@ import CatalogService from '../services/CatalogService';
 import BookManageService from '../services/BookManageService';
 import SharingDataService from '../services/SharingDataService';
 import { applicationLogger } from '../common/logging';
+import moment = require('moment');
+import { DateTimeFormatString } from '../common/Transform';
+import config = require('config');
 /* eslint-enable */
 
 @JsonController('/access-control-manage')
@@ -96,6 +99,12 @@ export default class {
             const chechResult = await BookManageService.checkSharePermission(userId, wf, app, destActor, document, event, thing, sourceActor, sourceAsset, operator);
 
             if (chechResult.checkResult === true) {
+                // APIキーに設定する有効期限の取得
+                const expirationDate = moment(new Date())
+                    .add(parseInt(config.get('standardTime')), 'hours')
+                    .add(parseInt(config.get('defaultExpire.addMinutes')), 'minutes')
+                    .format(DateTimeFormatString);
+
                 // 共有可否チェック結果の共有元分、APIキーを発行する
                 for (const permission of chechResult.permission) {
                     // アクターコードからブロックコードを取得する
@@ -116,7 +125,8 @@ export default class {
                         domains.toCatalog,
                         domains.fromCatalog,
                         item,
-                        operator
+                        operator,
+                        expirationDate
                     );
                     // 結果が空であれば、次の処理へ
                     if (!tokenList.length) {
