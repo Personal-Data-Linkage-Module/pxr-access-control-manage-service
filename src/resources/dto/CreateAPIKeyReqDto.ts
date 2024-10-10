@@ -9,10 +9,11 @@ import {
     IsOptional,
     IsString,
     ValidateNested,
-    IsArray
+    IsArray,
+    IsBoolean
 } from 'class-validator';
 import { Type, Transform } from 'class-transformer';
-import { transformToNumber } from '../../common/Transform';
+import { transformToBooleanFromString, transformToNumber } from '../../common/Transform';
 
 export class CodeObject {
     @Transform(({ value }) => { return transformToNumber(value); })
@@ -106,6 +107,11 @@ export class TargetObject {
     @IsOptional()
     @ValidateNested({ each: true })
         _code: any[] = [];
+
+    @Transform(({ value }) => { return transformToBooleanFromString(value); })
+    @IsBoolean()
+    @IsOptional()
+        allowPartialStore: boolean;
 }
 
 export default class CreateAPIKeyReqDto {
