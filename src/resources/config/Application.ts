@@ -42,6 +42,13 @@ export class Application {
                 `);
             });
         }
+
+        process.on('SIGTERM', () => {
+            // サーバをシャットダウンする
+            this.server.close(() => {
+                systemLogger.info('SIGTERM signal received.');
+            });
+        });
     }
 
     async start () {
