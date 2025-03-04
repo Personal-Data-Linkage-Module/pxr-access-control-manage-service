@@ -96,8 +96,11 @@ export default class {
      * @param dataType
      * @param operator
      */
-    static async checkStorePermission (userId: string, wfCode: number, appCode: number, actorCode: number, dataType: any[], operator: OperatorDomain) {
-        const url = config.get('bookManageService.postStorePermission') + '';
+    static async checkStorePermission (userId: string, wfCode: number, appCode: number, actorCode: number, dataType: any[], operator: OperatorDomain, allowPartialStore: boolean = false) {
+        let url = config.get('bookManageService.postStorePermission') + '';
+        if (allowPartialStore) {
+            url = url + '?allowPartialStore=true';
+        }
         const data = JSON.stringify({
             userId: userId,
             wfCode: wfCode,

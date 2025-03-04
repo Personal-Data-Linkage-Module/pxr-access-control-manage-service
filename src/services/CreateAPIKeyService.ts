@@ -88,7 +88,7 @@ export default class CreateAPIKeyService {
 
             // 蓄積定義による蓄積可否判定
             const result = await BookManageService.checkStorePermission(
-                item.caller.userId, wf, app, actor, targetDataType, operator);
+                item.caller.userId, wf, app, actor, targetDataType, operator, item.target.allowPartialStore);
 
             if (result.checkResult === true) {
                 // データ種を付与
